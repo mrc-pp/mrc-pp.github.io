@@ -182,7 +182,7 @@
               <figure>
                 <img src="assets/mrcpp.png" alt="MRCPP pipeline: ROI and exclusion zones, headlands, swaths, and allocation." />
                 <figcaption class="figcap">
-                  <strong>Fig. 2.</strong> MRCPP pipeline: ROI with exclusion zones, headland-buffered operable region, parallel swath decomposition,
+                  <strong>Fig. 1.</strong> MRCPP pipeline: ROI with exclusion zones, headland-buffered operable region, parallel swath decomposition,
                   VRM connectivity for feasible transitions, and multi-robot allocation via mTSP.
                 </figcaption>
               </figure>
@@ -569,7 +569,7 @@
               <figure>
                 <img src="assets/envs_complex.png" alt="Benchmark environments and MRCPP coverage paths." />
                 <figcaption class="figcap">
-                  <strong>Fig. 3.</strong> Representative benchmark environments with MRCPP-generated coverage paths; no-fly zones appear as shaded red polygons where applicable.
+                  <strong>Fig. 2.</strong> Representative benchmark environments with MRCPP-generated coverage paths; no-fly zones appear as shaded red polygons where applicable.
                 </figcaption>
               </figure>
             </div>
@@ -580,7 +580,7 @@
               <figure>
                 <img src="assets/scalability.png" alt="Scalability in the Complex environment with varying numbers of robots." />
                 <figcaption class="figcap">
-                  <strong>Fig. 4.</strong> Scalability demonstration in a fixed complex NFZ-constrained environment as fleet size increases.
+                  <strong>Fig. 3.</strong> Scalability demonstration in a fixed complex NFZ-constrained environment as fleet size increases.
                 </figcaption>
               </figure>
             </div>
@@ -607,7 +607,7 @@
             <figure>
               <img src="assets/coverage.png" alt="AAV coverage experiment with two DJI Mavic Air." />
               <figcaption class="figcap">
-                <strong>Fig. 1a.</strong> AAV coverage experiment: the ROI (white polygon) is covered by two DJI Mavic Air AAVs with paths shown in orange and blue; the no-fly zone is highlighted in red.
+                <strong>Fig. 4a.</strong> AAV coverage experiment: the ROI (white polygon) is covered by two DJI Mavic Air AAVs with paths shown in orange and blue; the no-fly zone is highlighted in red.
               </figcaption>
             </figure>
           </div>
@@ -616,7 +616,7 @@
             <figure>
               <img src="assets/asv_f.png" alt="ASV coverage experiment with two surface vehicles." />
               <figcaption class="figcap">
-                <strong>Fig. 1b.</strong> ASV coverage experiment: two ASVs execute coverage paths shown in red and green over satellite imagery of an aquatic environment.
+                <strong>Fig. 4b.</strong> ASV coverage experiment: two ASVs execute coverage paths shown in red and green over satellite imagery of an aquatic environment.
               </figcaption>
             </figure>
           </div>
@@ -625,30 +625,68 @@
     </section>
 
     <!-- Videos -->
-    <section id="videos" class="section">
-      <div class="container is-max-desktop">
-        <h2 class="title is-3">Videos</h2>
+  <!-- Videos -->
+  <section id="videos" class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">Videos</h2>
 
-        <div class="content">
-          <div class="columns is-variable is-5">
-            <div class="column is-6">
-              <h3 class="title is-5">AAV Experiment</h3>
-              <video class="video" controls>
-                <source src="./assets/videos/coverage_exp.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div class="column is-6">
-              <h3 class="title is-5">ASV Experiment</h3>
-              <video class="video" controls>
-                <source src="./assets/videos/asv_f_v.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
+      <p class="is-size-6 mb-4">
+        <strong>Note:</strong> For best viewing quality, please watch the videos in
+        <strong>full-screen mode</strong>.
+      </p>
+
+      <div class="content">
+        <div class="columns is-variable is-5">
+
+          <!-- AAV Video -->
+          <div class="column is-6">
+            <h3 class="title is-5">AAV Experiment</h3>
+
+            <video class="video" controls playsinline preload="metadata">
+              <source src="./assets/videos/coverage_exp.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+
+            <p class="is-size-7 mt-2">
+              <strong>Description (Fig. 1a):</strong>
+              Two DJI Mavic Air AAVs execute MRCPP-generated coverage paths over a polygonal
+              Region of Interest (ROI). The planned trajectories (orange and blue) are uploaded
+              to the Litchi mission-planning software and flown concurrently. The circular red
+              region denotes a no-fly zone enforced during path generation.
+            </p>
+
+            <p class="is-size-7 has-text-grey">
+              Tip: Click the ⛶ icon to view in full screen.
+            </p>
           </div>
+
+          <!-- ASV Video -->
+          <div class="column is-6">
+            <h3 class="title is-5">ASV Experiment</h3>
+
+            <video class="video" controls playsinline preload="metadata">
+              <source src="./assets/videos/asv_f_v.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+
+            <p class="is-size-7 mt-2">
+              <strong>Description (Fig. 1b):</strong>
+              Two autonomous surface vehicles (ASVs), each equipped with YSI EXO2 sondes,
+              execute MRCPP-planned coverage paths in a coastal aquatic environment.
+              The executed trajectories (red and green) are overlaid on satellite imagery,
+              enabling real-time monitoring and verification of coverage performance.
+            </p>
+
+            <p class="is-size-7 has-text-grey">
+              Tip: Full-screen playback is recommended for improved spatial clarity.
+            </p>
+          </div>
+
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+
 
     <!-- BibTeX -->
     <section id="bibtex" class="section bibtex">
