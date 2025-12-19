@@ -122,13 +122,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            We present <strong>MRCPP</strong>, a framework for multi-robot coverage path planning in large, non-convex Regions of Interest (ROIs)
-            containing obstacles and no-fly zones. MRCPP first determines a sweep orientation using a minimum-area enclosing rectangle computed via
-            a rotating-calipers procedure. With this orientation, a minimum-turn swath-generation algorithm produces parallel coverage lines clipped
-            to obstacle-free space and ordered along the field’s minor axis to improve continuity. We incorporate headland buffers to guarantee
-            clearance for turning maneuvers and use a visibility-roadmap (VRM) to connect disjoint swaths via feasible transitions inside the buffered
-            region. Finally, a modified <strong>mTSP</strong> formulation allocates ordered swaths to robots to balance workloads and reduce mission time.
-            Simulations and real-world experiments demonstrate improvements in energy, computation time, and path quality.
+            This letter presents a framework for multi-robot coverage path planning in large, nonconvex Regions of Interest containing obstacles and no-fly zones. The proposed method begins by determining an optimal sweep orientation through the minimum-area enclosing rectangle computed using a rotating-calipers procedure. Using this orientation, a minimum-turn swath generation algorithm produces parallel coverage lines that are clipped against the obstacle-free space and sorted along the field’s minor axis to ensure spatial continuity and reduce turn transitions. Both the outer ROI boundary and all internal exclusion zones are expanded using analytically derived headland buffers, producing a reduced operable region that guarantees sufficient clearance for turning maneuvers and prevents boundary violations. A visibility-roadmap (VRM) structure provides geometric connectivity between disjoint swath segments, enabling feasible transitions that remain entirely inside the buffered region. A modified multiple Traveling Salesman Problem (mTSP) formulation assigns the ordered swaths to robots, balancing workloads and minimizing total mission time. Simulations and real-world experiments demonstrate that the proposed framework significantly reduces the number of turns, energy consumption, and computation time compared to state-of-the-art planners, while maintaining strong scalability across increasing fleet sizes. 
           </p>
         </div>
       </div>
@@ -640,14 +634,14 @@
             <div class="column is-6">
               <h3 class="title is-5">AAV Experiment</h3>
               <video class="video" controls>
-                <source src="assets/videos/aav_exp.mp4" type="video/mp4" />
+                <source src="./assets/videos/coverage_exp.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
             <div class="column is-6">
               <h3 class="title is-5">ASV Experiment</h3>
               <video class="video" controls>
-                <source src="assets/videos/asv_exp.mp4" type="video/mp4" />
+                <source src="./assets/videos/asv_f_v.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
