@@ -4,26 +4,31 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Updated to match MRCPP paper :contentReference[oaicite:0]{index=0} -->
     <meta
       name="description"
-      content="Project page for Efficient Multi-Robot Coverage Path Planning of Non-Convex Regions of Interests (MRCPP). Minimum-area rotating-rectangle sweep orientation, minimum-turn swath generation, headland buffers, VRM connectivity, and mTSP allocation."
+      content="Project page for Efficient Multi-Robot Coverage Path Planning of Non-Convex Regions of Interests (MRCPP). Minimum-area sweep orientation, minimum-turn swath generation, headland buffers, VRM connectivity, and mTSP allocation."
     />
     <meta
       name="keywords"
-      content="MRCPP, multi-robot coverage path planning, non-convex ROI, minimum-turn swath generation, rotating calipers, minimum-area enclosing rectangle, headland buffer, Minkowski sum, Minkowski difference, visibility roadmap, VRM, mTSP, LKH, no-fly zones, obstacles, UAV, AAV, ASV"
+      content="MRCPP, multi-robot coverage path planning, non-convex ROI, minimum-turn swath generation, rotating calipers, minimum-area enclosing rectangle, headland buffer, visibility roadmap, VRM, mTSP, LKH, no-fly zones, obstacles, UAV, AAV, ASV"
     />
 
     <title>Efficient Multi-Robot Coverage Path Planning of Non-Convex Regions of Interests (MRCPP)</title>
 
-    <!-- Fonts & UI (unchanged) -->
-    <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Noto+Sans:400,700|Castoro:400,700&display=swap" rel="stylesheet" />
+    <!-- Fonts & UI -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Noto+Sans:400,700|Castoro:400,700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
     <style>
       :root { --brand: #2b6cb0; }
-      html, body { font-family: 'Noto Sans', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
+      html, body {
+        font-family: 'Noto Sans', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial,
+          'Apple Color Emoji', 'Segoe UI Emoji';
+      }
       .hero.is-light { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 60%); }
       .publication-title { font-family: 'Google Sans', 'Noto Sans', sans-serif; letter-spacing: -0.3px; }
       .author-block a { color: var(--brand); text-decoration: none; }
@@ -61,14 +66,13 @@
             <span class="tag is-bow is-light is-rounded">mTSP Allocation</span>
           </p>
 
-          <!-- Authors (edit as needed) -->
+          <!-- Authors -->
           <div class="is-size-5 mt-4 publication-authors">
             <span class="author-block"><strong>Authors:</strong> &lt;Add authors & affiliations&gt;</span>
           </div>
 
           <!-- Links -->
           <div class="publication-links mt-4">
-            <!-- Update filename if needed -->
             <a class="button is-dark is-rounded" href="assets/MRCPP.pdf" target="_blank" rel="noopener">
               <span class="icon"><i class="fas fa-file-pdf"></i></span>
               <span>Paper (PDF)</span>
@@ -84,7 +88,6 @@
               <span>Cite</span>
             </a>
 
-            <!-- Optional: Code repo -->
             <a class="button is-dark is-rounded" href="https://github.com/your/repo" target="_blank" rel="noopener">
               <span class="icon"><i class="fab fa-github"></i></span>
               <span>Code</span>
@@ -101,8 +104,11 @@
           <div class="level-left">
             <a class="level-item" href="#abstract">Abstract</a>
             <a class="level-item" href="#overview">Overview</a>
+            <a class="level-item" href="#pipeline">Pipeline</a>
+            <a class="level-item" href="#tables">Tables</a>
             <a class="level-item" href="#results">Results</a>
-            <a class="level-item" href="#field">Field Experiments</a>
+            <a class="level-item" href="#field">Field</a>
+            <a class="level-item" href="#videos">Videos</a>
             <a class="level-item" href="#bibtex">BibTeX</a>
             <a class="level-item" href="#ack">Acknowledgments</a>
           </div>
@@ -117,14 +123,12 @@
         <div class="content has-text-justified">
           <p>
             We present <strong>MRCPP</strong>, a framework for multi-robot coverage path planning in large, non-convex Regions of Interest (ROIs)
-            containing obstacles and no-fly zones. MRCPP first determines an optimal sweep orientation using a minimum-area enclosing rectangle
-            computed via a rotating-calipers procedure. With this orientation, a minimum-turn swath-generation algorithm produces parallel coverage
-            lines clipped against obstacle-free space and ordered along the field’s minor axis to improve continuity and reduce turn transitions.
-            We expand both the outer ROI boundary and internal exclusion zones using headland buffers to guarantee clearance for turning maneuvers.
-            A visibility-roadmap (VRM) provides connectivity between disjoint swath segments via feasible transitions entirely inside the buffered
+            containing obstacles and no-fly zones. MRCPP first determines a sweep orientation using a minimum-area enclosing rectangle computed via
+            a rotating-calipers procedure. With this orientation, a minimum-turn swath-generation algorithm produces parallel coverage lines clipped
+            to obstacle-free space and ordered along the field’s minor axis to improve continuity. We incorporate headland buffers to guarantee
+            clearance for turning maneuvers and use a visibility-roadmap (VRM) to connect disjoint swaths via feasible transitions inside the buffered
             region. Finally, a modified <strong>mTSP</strong> formulation allocates ordered swaths to robots to balance workloads and reduce mission time.
-            Simulations and real-world experiments show improvements in turns, energy, and computation time, with videos available at
-            <a href="https://mrc-pp.github.io/" target="_blank" rel="noopener">mrc-pp.github.io</a>.
+            Simulations and real-world experiments demonstrate improvements in energy, computation time, and path quality.
           </p>
         </div>
       </div>
@@ -134,6 +138,7 @@
     <section id="overview" class="section">
       <div class="container is-max-desktop">
         <h2 class="title is-3">Overview & Contributions</h2>
+
         <div class="content has-text-justified">
           <p>
             MRCPP integrates analytic geometry, graph-based connectivity, and optimization-based allocation to produce efficient coverage paths
@@ -146,21 +151,11 @@
             <div class="content">
               <h3 class="title is-5">Key Ideas</h3>
               <ul>
-                <li>
-                  <strong>Minimum-area sweep orientation:</strong> Rotating calipers compute the minimum-area enclosing rectangle to set a globally consistent sweep direction.
-                </li>
-                <li>
-                  <strong>Minimum-turn swath generation:</strong> Parallel swaths aligned with the rectangle’s major axis are clipped to the ROI and ordered along the minor axis.
-                </li>
-                <li>
-                  <strong>Headland buffers:</strong> Inward offset of the ROI and outward expansion of exclusion zones create a safe operable region for turns.
-                </li>
-                <li>
-                  <strong>VRM connectivity:</strong> A visibility-roadmap graph connects disjoint swaths using collision-free detours within the buffered region.
-                </li>
-                <li>
-                  <strong>Workload-balanced allocation:</strong> A modified <strong>mTSP</strong> assigns swaths to minimize the maximum robot path length (mission time proxy).
-                </li>
+                <li><strong>Minimum-area sweep orientation:</strong> rotating calipers compute the minimum-area enclosing rectangle to set a globally consistent sweep direction.</li>
+                <li><strong>Minimum-turn swath generation:</strong> parallel swaths aligned with the sweep direction, clipped to the ROI, ordered along the minor axis.</li>
+                <li><strong>Headland buffers:</strong> buffering the ROI boundary and exclusion zones yields a safe operable region for turns.</li>
+                <li><strong>VRM connectivity:</strong> a visibility-roadmap graph connects disjoint swaths with collision-free transitions.</li>
+                <li><strong>Workload-balanced allocation:</strong> a modified <strong>mTSP</strong> assigns swaths to minimize the maximum robot path length.</li>
               </ul>
 
               <div class="tags mt-3">
@@ -175,15 +170,15 @@
       </div>
     </section>
 
-    <!-- Results / Benchmarks -->
-    <section id="results" class="section">
+    <!-- MRCPP Pipeline (MOVED BEFORE BENCHMARKS) -->
+    <section id="pipeline" class="section">
       <div class="container is-max-desktop">
-        <h2 class="title is-3">Benchmark Results</h2>
+        <h2 class="title is-3">MRCPP Pipeline</h2>
+
         <div class="content has-text-justified">
           <p>
-            We evaluate MRCPP on multiple benchmark environments (e.g., Cape, Complex, Island, Simple, Rectangle) with obstacles/no-fly zones,
-            reporting computation time, energy (trajectory-free and trajectory-based), and path length. We also test scalability in a fixed NFZ-constrained
-            complex environment as the number of robots increases.
+            MRCPP follows a geometry-to-optimization workflow: (i) compute a global sweep orientation, (ii) generate parallel swaths in the buffered free space,
+            (iii) connect disjoint swaths using VRM-based transitions, and (iv) allocate swaths to robots via a workload-balanced mTSP formulation.
           </p>
         </div>
 
@@ -191,34 +186,407 @@
           <div class="columns is-multiline">
             <div class="column is-12">
               <figure>
-                <!-- Replace with your exported figure (e.g., paper Fig. 3 montage) -->
-                <img src="assets/envs_complex.png" alt="Benchmark environments and MRCPP coverage paths." />
-                <figcaption class="figcap">
-                  <strong>Fig. 3.</strong> Representative benchmark environments with MRCPP-generated coverage paths for three robots; no-fly zones appear as shaded red polygons where applicable. (Replace this image with your final exported figure.)
-                </figcaption>
-              </figure>
-            </div>
-          </div>
-
-          <div class="columns is-multiline">
-            <div class="column is-12">
-              <figure>
-                <!-- Replace with your exported scalability figure (e.g., paper Fig. 4) -->
-                <img src="assets/scalability.png" alt="Scalability in the Complex environment with varying numbers of robots." />
-                <figcaption class="figcap">
-                  <strong>Fig. 4.</strong> Scalability demonstration in a fixed complex NFZ-constrained environment as the fleet size increases (e.g., 4–10 robots). (Replace this image with your final exported figure.)
-                </figcaption>
-              </figure>
-            </div>
-          </div>
-
-          <div class="columns is-multiline">
-            <div class="column is-12">
-              <figure>
-                <!-- Replace with your pipeline figure (e.g., paper Fig. 2) -->
                 <img src="assets/mrcpp.png" alt="MRCPP pipeline: ROI and exclusion zones, headlands, swaths, and allocation." />
                 <figcaption class="figcap">
-                  <strong>Fig. 2.</strong> MRCPP pipeline: ROI with exclusion zones, headland-buffered operable region, parallel swath decomposition, and multi-robot allocation. (Replace this image with your final exported figure.)
+                  <strong>Fig. 2.</strong> MRCPP pipeline: ROI with exclusion zones, headland-buffered operable region, parallel swath decomposition,
+                  VRM connectivity for feasible transitions, and multi-robot allocation via mTSP.
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABLES (ADDED) -->
+    <section id="tables" class="section">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3">Tables</h2>
+
+        <!-- Table I -->
+        <div class="content">
+          <h3 class="title is-5">Table I. Three-AAV Comparison Across Environments</h3>
+
+          <div class="table-container">
+            <table class="table is-fullwidth is-striped is-hoverable">
+              <thead>
+                <tr>
+                  <th>Scenario</th>
+                  <th>Planner</th>
+                  <th>Time [s]</th>
+                  <th><span class="is-code">E</span><sub>o</sub> [Wh]</th>
+                  <th><span class="is-code">E</span><sub>t</sub> [Wh]</th>
+                  <th><span class="is-code">E</span><sub>o,avg</sub> [Wh]</th>
+                  <th><span class="is-code">E</span><sub>t,avg</sub> [Wh]</th>
+                  <th>Path [km]</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <!-- Cape -->
+                <tr>
+                  <td>Cape</td>
+                  <td><strong>MRCPP (Ours)</strong></td>
+                  <td><strong>0.503</strong></td>
+                  <td><strong>500.780</strong></td>
+                  <td><strong>502.985</strong></td>
+                  <td><strong>166.927</strong></td>
+                  <td><strong>167.662</strong></td>
+                  <td>31.187</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>EAMCMP</td>
+                  <td>4.905</td>
+                  <td>594.200</td>
+                  <td>567.693</td>
+                  <td>198.067</td>
+                  <td>189.231</td>
+                  <td>36.061</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>DARP+MST</td>
+                  <td>33.818</td>
+                  <td>627.110</td>
+                  <td>578.055</td>
+                  <td>209.037</td>
+                  <td>192.685</td>
+                  <td>35.397</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>POPCORN+SALT</td>
+                  <td>55.872</td>
+                  <td>689.690</td>
+                  <td>607.341</td>
+                  <td>229.897</td>
+                  <td>202.447</td>
+                  <td><strong>30.916</strong></td>
+                </tr>
+
+                <!-- Complex 12 -->
+                <tr>
+                  <td>Complex 12</td>
+                  <td><strong>MRCPP (Ours)</strong></td>
+                  <td>13.960</td>
+                  <td><strong>485.610</strong></td>
+                  <td>440.339</td>
+                  <td><strong>161.870</strong></td>
+                  <td>146.780</td>
+                  <td>28.185</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>EAMCMP</td>
+                  <td><strong>0.073</strong></td>
+                  <td>571.160</td>
+                  <td>539.665</td>
+                  <td>190.387</td>
+                  <td>179.888</td>
+                  <td>33.358</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>DARP+MST</td>
+                  <td>45.307</td>
+                  <td>487.400</td>
+                  <td><strong>434.163</strong></td>
+                  <td>162.467</td>
+                  <td><strong>144.721</strong></td>
+                  <td><strong>24.965</strong></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>POPCORN+SALT</td>
+                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                </tr>
+
+                <!-- Complex 22 -->
+                <tr>
+                  <td>Complex 22</td>
+                  <td><strong>MRCPP (Ours)</strong></td>
+                  <td><strong>0.884</strong></td>
+                  <td><strong>271.670</strong></td>
+                  <td><strong>244.131</strong></td>
+                  <td><strong>90.557</strong></td>
+                  <td><strong>81.377</strong></td>
+                  <td>15.731</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>EAMCMP</td>
+                  <td>1.246</td>
+                  <td>419.690</td>
+                  <td>401.813</td>
+                  <td>139.897</td>
+                  <td>133.938</td>
+                  <td>23.549</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>DARP+MST</td>
+                  <td>18.217</td>
+                  <td>272.440</td>
+                  <td>253.906</td>
+                  <td>90.813</td>
+                  <td>84.635</td>
+                  <td><strong>13.609</strong></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>POPCORN+SALT</td>
+                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                </tr>
+
+                <!-- Island -->
+                <tr>
+                  <td>Island</td>
+                  <td><strong>MRCPP (Ours)</strong></td>
+                  <td><strong>0.177</strong></td>
+                  <td><strong>28.930</strong></td>
+                  <td><strong>28.048</strong></td>
+                  <td><strong>9.643</strong></td>
+                  <td><strong>9.349</strong></td>
+                  <td><strong>1.272</strong></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>EAMCMP</td>
+                  <td>0.275</td>
+                  <td>36.800</td>
+                  <td>35.662</td>
+                  <td>12.267</td>
+                  <td>11.887</td>
+                  <td>1.596</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>DARP+MST</td>
+                  <td>5.205</td>
+                  <td>32.960</td>
+                  <td>28.585</td>
+                  <td>10.987</td>
+                  <td>9.528</td>
+                  <td>1.325</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>POPCORN+SALT</td>
+                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                </tr>
+
+                <!-- Rect -->
+                <tr>
+                  <td>Rect</td>
+                  <td><strong>MRCPP (Ours)</strong></td>
+                  <td>0.205</td>
+                  <td><strong>67.550</strong></td>
+                  <td><strong>64.948</strong></td>
+                  <td><strong>22.517</strong></td>
+                  <td><strong>21.649</strong></td>
+                  <td><strong>3.708</strong></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>EAMCMP</td>
+                  <td><strong>0.017</strong></td>
+                  <td>85.160</td>
+                  <td>78.815</td>
+                  <td>28.387</td>
+                  <td>26.272</td>
+                  <td>4.347</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>DARP+MST</td>
+                  <td>4.746</td>
+                  <td>87.560</td>
+                  <td>103.515</td>
+                  <td>29.187</td>
+                  <td>34.505</td>
+                  <td>3.807</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>POPCORN+SALT</td>
+                  <td>20.714</td>
+                  <td>131.000</td>
+                  <td>119.013</td>
+                  <td>43.667</td>
+                  <td>39.671</td>
+                  <td>3.712</td>
+                </tr>
+
+                <!-- Simple -->
+                <tr>
+                  <td>Simple</td>
+                  <td><strong>MRCPP (Ours)</strong></td>
+                  <td>0.248</td>
+                  <td><strong>108.790</strong></td>
+                  <td><strong>108.411</strong></td>
+                  <td><strong>36.263</strong></td>
+                  <td><strong>36.137</strong></td>
+                  <td><strong>6.186</strong></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>EAMCMP</td>
+                  <td><strong>0.018</strong></td>
+                  <td>183.210</td>
+                  <td>173.527</td>
+                  <td>61.070</td>
+                  <td>57.842</td>
+                  <td>10.283</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>DARP+MST</td>
+                  <td>5.700</td>
+                  <td>142.050</td>
+                  <td>133.504</td>
+                  <td>47.350</td>
+                  <td>44.501</td>
+                  <td>6.288</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>POPCORN+SALT</td>
+                  <td>32.283</td>
+                  <td>230.700</td>
+                  <td>212.720</td>
+                  <td>76.900</td>
+                  <td>70.907</td>
+                  <td>6.579</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="help">
+            Best values per scenario are shown in <strong>bold</strong>. A dash (—) indicates no solution for that method in the scenario.
+          </p>
+        </div>
+
+        <hr />
+
+        <!-- Table II -->
+        <div class="content">
+          <h3 class="title is-5">Table II. Scalability in Complex 22 (4–10 AAVs)</h3>
+
+          <div class="table-container">
+            <table class="table is-fullwidth is-striped is-hoverable">
+              <thead>
+                <tr>
+                  <th rowspan="2">Scenario</th>
+                  <th colspan="4">MRCPP</th>
+                  <th colspan="4">EAMCMP</th>
+                  <th colspan="4">DARP+MST</th>
+                </tr>
+                <tr>
+                  <th><span class="is-code">t</span><sub>c</sub> [s]</th>
+                  <th><span class="is-code">E</span><sub>o,avg</sub> [Wh]</th>
+                  <th><span class="is-code">E</span><sub>t,avg</sub> [Wh]</th>
+                  <th>ℓ [km]</th>
+
+                  <th><span class="is-code">t</span><sub>c</sub> [s]</th>
+                  <th><span class="is-code">E</span><sub>o,avg</sub> [Wh]</th>
+                  <th><span class="is-code">E</span><sub>t,avg</sub> [Wh]</th>
+                  <th>ℓ [km]</th>
+
+                  <th><span class="is-code">t</span><sub>c</sub> [s]</th>
+                  <th><span class="is-code">E</span><sub>o,avg</sub> [Wh]</th>
+                  <th><span class="is-code">E</span><sub>t,avg</sub> [Wh]</th>
+                  <th>ℓ [km]</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>complex (4 AAVs)</td>
+                  <td>3.36</td><td><strong>67.26</strong></td><td><strong>59.75</strong></td><td>15.60</td>
+                  <td><strong>0.98</strong></td><td>75.82</td><td>70.75</td><td>16.83</td>
+                  <td>14.40</td><td>69.64</td><td>62.08</td><td><strong>13.86</strong></td>
+                </tr>
+                <tr>
+                  <td>complex (5 AAVs)</td>
+                  <td><strong>0.84</strong></td><td><strong>54.01</strong></td><td><strong>47.52</strong></td><td>15.71</td>
+                  <td>1.25</td><td>62.14</td><td>57.43</td><td>17.29</td>
+                  <td>22.88</td><td>54.87</td><td>48.82</td><td><strong>13.49</strong></td>
+                </tr>
+                <tr>
+                  <td>complex (6 AAVs)</td>
+                  <td><strong>0.95</strong></td><td><strong>43.95</strong></td><td><strong>39.24</strong></td><td>15.33</td>
+                  <td>1.05</td><td>51.97</td><td>48.01</td><td>17.36</td>
+                  <td>37.04</td><td>49.68</td><td>43.92</td><td><strong>15.10</strong></td>
+                </tr>
+                <tr>
+                  <td>complex (7 AAVs)</td>
+                  <td><strong>1.03</strong></td><td><strong>35.93</strong></td><td><strong>32.48</strong></td><td><strong>14.51</strong></td>
+                  <td>1.50</td><td>43.04</td><td>41.18</td><td>17.12</td>
+                  <td>56.13</td><td>44.24</td><td>38.98</td><td>15.64</td>
+                </tr>
+                <tr>
+                  <td>complex (8 AAVs)</td>
+                  <td>1.22</td><td><strong>32.12</strong></td><td><strong>28.46</strong></td><td><strong>14.91</strong></td>
+                  <td><strong>1.14</strong></td><td>40.24</td><td>37.98</td><td>18.39</td>
+                  <td>66.04</td><td>40.17</td><td>35.41</td><td>15.96</td>
+                </tr>
+                <tr>
+                  <td>complex (9 AAVs)</td>
+                  <td>1.00</td><td><strong>27.10</strong></td><td><strong>24.30</strong></td><td><strong>14.11</strong></td>
+                  <td><strong>0.73</strong></td><td>39.82</td><td>38.17</td><td>20.56</td>
+                  <td>48.32</td><td>37.77</td><td>33.38</td><td>16.57</td>
+                </tr>
+                <tr>
+                  <td>complex (10 AAVs)</td>
+                  <td>1.46</td><td><strong>24.25</strong></td><td><strong>21.87</strong></td><td><strong>14.00</strong></td>
+                  <td><strong>0.07</strong></td><td>57.12</td><td>53.97</td><td>33.36</td>
+                  <td>—</td><td>—</td><td>—</td><td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="help">
+            Columns report computation time (<span class="is-code">t</span><sub>c</sub>), average energy per AAV
+            (<span class="is-code">E</span><sub>o,avg</sub>, <span class="is-code">E</span><sub>t,avg</sub>), and total coverage path length (ℓ).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results / Benchmarks (NOW AFTER PIPELINE + TABLES) -->
+    <section id="results" class="section">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3">Benchmark Results</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            We evaluate MRCPP on multiple benchmark environments (e.g., Cape, Complex, Island, Simple, Rectangle) with obstacles/no-fly zones,
+            reporting computation time, energy (trajectory-free and trajectory-based), and path length. We also test scalability in a fixed
+            NFZ-constrained complex environment as the number of robots increases.
+          </p>
+        </div>
+
+        <div class="figure-grid">
+          <div class="columns is-multiline">
+            <div class="column is-12">
+              <figure>
+                <img src="assets/envs_complex.png" alt="Benchmark environments and MRCPP coverage paths." />
+                <figcaption class="figcap">
+                  <strong>Fig. 3.</strong> Representative benchmark environments with MRCPP-generated coverage paths; no-fly zones appear as shaded red polygons where applicable.
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <div class="columns is-multiline">
+            <div class="column is-12">
+              <figure>
+                <img src="assets/scalability.png" alt="Scalability in the Complex environment with varying numbers of robots." />
+                <figcaption class="figcap">
+                  <strong>Fig. 4.</strong> Scalability demonstration in a fixed complex NFZ-constrained environment as fleet size increases.
                 </figcaption>
               </figure>
             </div>
@@ -245,7 +613,7 @@
             <figure>
               <img src="assets/coverage.png" alt="AAV coverage experiment with two DJI Mavic Air." />
               <figcaption class="figcap">
-                <strong>Fig. 1a.</strong> AAV coverage experiment: the ROI (white polygon) is covered by two DJI Mavic Air AAVs with paths shown in orange and blue; the no-fly zone is highlighted in red. (Replace this image with your final exported Fig. 1a.)
+                <strong>Fig. 1a.</strong> AAV coverage experiment: the ROI (white polygon) is covered by two DJI Mavic Air AAVs with paths shown in orange and blue; the no-fly zone is highlighted in red.
               </figcaption>
             </figure>
           </div>
@@ -254,7 +622,7 @@
             <figure>
               <img src="assets/asv_f.png" alt="ASV coverage experiment with two surface vehicles." />
               <figcaption class="figcap">
-                <strong>Fig. 1b.</strong> ASV coverage experiment: two ASVs execute coverage paths shown in red and green over satellite imagery of an aquatic environment. (Replace this image with your final exported Fig. 1b.)
+                <strong>Fig. 1b.</strong> ASV coverage experiment: two ASVs execute coverage paths shown in red and green over satellite imagery of an aquatic environment.
               </figcaption>
             </figure>
           </div>
@@ -263,15 +631,11 @@
     </section>
 
     <!-- Videos -->
-    <section class="section">
+    <section id="videos" class="section">
       <div class="container is-max-desktop">
         <h2 class="title is-3">Videos</h2>
 
         <div class="content">
-          <p class="mb-3">
-            Add your rendered videos here (or link out to the project page at <a href="https://mrc-pp.github.io/" target="_blank" rel="noopener">mrc-pp.github.io</a>).
-          </p>
-
           <div class="columns is-variable is-5">
             <div class="column is-6">
               <h3 class="title is-5">AAV Experiment</h3>
@@ -298,8 +662,8 @@
         <h2 class="title is-3">BibTeX</h2>
 <pre>@article{mrcpp2025,
   title   = {Efficient Multi-Robot Coverage Path Planning of Non-Convex Regions of Interests},
-  author  = {&lt;add authors&gt;},
-  journal = {&lt;IEEE Robotics and Automation Letters (or venue)&gt;},
+  author  = {&lt;authors&gt;},
+  journal = {},
   year    = {2025},
   url     = {https://mrc-pp.github.io/}
 }</pre>
@@ -324,7 +688,7 @@
     </footer>
 
     <script>
-      // Tiny scrollspy highlight (unchanged)
+      // Tiny scrollspy highlight
       const links = document.querySelectorAll('.scrollspy a');
       const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
       const onScroll = () => {
