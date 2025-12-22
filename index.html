@@ -196,7 +196,7 @@
     </div>
   </section>
 
-<!-- RESULTS -->
+  <!-- RESULTS -->
   <section class="section" id="results">
     <div class="container">
       <div class="section__head">
@@ -213,8 +213,6 @@
 
       <div class="tabPanels">
         <div class="panel is-active" role="tabpanel" id="panel-sim" aria-labelledby="tab-sim">
-
-          <!-- existing content -->
           <div class="grid2">
             <div class="infoCard">
               <h3>Benchmarks</h3>
@@ -241,49 +239,6 @@
               <p class="small muted">You can add a plot image here (optional).</p>
             </div>
           </div>
-
-          <!-- ================= EAMCMP BASELINE COMPARISON (ADDED) ================= -->
-          <div class="infoCard" style="margin-top:24px;">
-            <h3>EAMCMP benchmark coverage paths</h3>
-
-            <p>
-              Compared to MRCPP, EAMCMP consistently exhibits higher energy consumption
-              and longer execution paths across benchmark environments. The absence of
-              an explicit minimum-turn swath orientation leads to frequent reorientation
-              maneuvers and increased ferrying distance, particularly in elongated or
-              structured regions. Consequently, EAMCMP underperforms MRCPP in both
-              energy efficiency and mission completion time.
-            </p>
-
-            <div class="benchImgs">
-              <figure class="benchImg">
-                <img src="assets/eamcpp/cape_ea.png" alt="EAMCMP Cape" />
-                <figcaption><strong>Cape</strong> (EAMCMP)</figcaption>
-              </figure>
-
-              <figure class="benchImg">
-                <img src="assets/eamcpp/complex_ea_15.png" alt="EAMCMP Complex" />
-                <figcaption><strong>Complex</strong> (EAMCMP)</figcaption>
-              </figure>
-
-              <figure class="benchImg">
-                <img src="assets/eamcpp/rect_ea.png" alt="EAMCMP Rect" />
-                <figcaption><strong>Rect</strong> (EAMCMP)</figcaption>
-              </figure>
-
-              <figure class="benchImg">
-                <img src="assets/eamcpp/nice_ea.png" alt="EAMCMP Island" />
-                <figcaption><strong>Island</strong> (EAMCMP)</figcaption>
-              </figure>
-
-              <figure class="benchImg">
-                <img src="assets/eamcpp/simple_ea.png" alt="EAMCMP Simple" />
-                <figcaption><strong>Simple</strong> (EAMCMP)</figcaption>
-              </figure>
-            </div>
-          </div>
-          <!-- ==================================================================== -->
-
         </div>
 
         <div class="panel" role="tabpanel" id="panel-real" aria-labelledby="tab-real">
