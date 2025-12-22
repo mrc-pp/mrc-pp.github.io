@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MRCPP — Efficient Multi-Robot Coverage Path Planning</title>
+  <meta name="description" content="MRCPP: Minimum-turn swath generation + VRM connectivity + mTSP allocation for multi-robot coverage in non-convex ROIs with obstacles and no-fly zones." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body>
+  <header class="topbar" id="top">
+    <div class="container topbar__inner">
+      <a class="brand" href="#top" aria-label="MRCPP Home">
+        <span class="brand__mark">MR</span>
+        <span class="brand__name">MRCPP</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">
+          <span class="nav__toggleBars"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+
+        <div class="nav__menu" id="navMenu">
+          <a href="#overview">Overview</a>
+          <a href="#method">Method</a>
+          <a href="#results">Results</a>
+          <a href="#videos">Videos</a>
+          <a href="#code">Code</a>
+          <a href="#citation">Citation</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero__grid">
+      <div class="hero__content">
+        <div class="badge">IEEE RAL-style Project Page</div>
+        <h1>Efficient Multi-Robot Coverage Path Planning<br/>of Non-Convex Regions of Interest</h1>
+
+        <p class="lead">
+          MRCPP generates <strong>minimum-turn swaths</strong>, ensures <strong>obstacle-aware connectivity</strong> using a
+          <strong>visibility roadmap (VRM)</strong>, and balances multi-robot workloads via a <strong>modified mTSP</strong>.
+        </p>
+
+        <div class="hero__meta">
+          <div class="metaItem">
+            <div class="metaItem__k">Domain</div>
+            <div class="metaItem__v">Multi-Robot Coverage • AAV/ASV</div>
+          </div>
+          <div class="metaItem">
+            <div class="metaItem__k">Key Goals</div>
+            <div class="metaItem__v">Lower turns • Lower energy • Fast planning</div>
+          </div>
+        </div>
+
+        <div class="ctaRow">
+          <a class="btn btn--primary" href="assets/media/paper.pdf" target="_blank" rel="noopener">📄 Paper (PDF)</a>
+          <a class="btn" href="#videos">▶️ Watch Videos</a>
+          <a class="btn" href="#code">💻 Code</a>
+        </div>
+
+        <p class="small muted">
+          Tip: Replace placeholders (authors, links, figures) with your final content.
+        </p>
+      </div>
+
+      <div class="hero__visual">
+        <div class="card card--teaser">
+          <div class="card__head">
+            <div>
+              <div class="card__title">Teaser</div>
+              <div class="card__subtitle">AAV + ASV real-world experiments</div>
+            </div>
+            <a class="pill" href="#results">See results →</a>
+          </div>
+
+          <!-- Replace with a teaser image from Fig. 1 -->
+          <img class="teaserImg" src="assets/media/fig1.jpg" alt="MRCPP real-world experiments teaser (AAV + ASV)" />
+          <div class="card__foot">
+            <div class="tag">Minimum-turn swaths</div>
+            <div class="tag">VRM detours</div>
+            <div class="tag">Balanced allocation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section class="section" id="overview">
+    <div class="container">
+      <div class="section__head">
+        <h2>Overview</h2>
+        <p class="muted">
+          MRCPP targets large, non-convex ROIs with obstacles and no-fly zones, focusing on turn-efficient, feasible,
+          and workload-balanced multi-robot coverage.
+        </p>
+      </div>
+
+      <div class="grid3">
+        <div class="infoCard">
+          <h3>Minimum-turn swath generation</h3>
+          <p>
+            Finds an optimal sweep orientation using a minimum-area enclosing rectangle (rotating calipers), then generates
+            parallel swaths aligned with the principal axis.
+          </p>
+        </div>
+
+        <div class="infoCard">
+          <h3>Obstacle-aware connectivity</h3>
+          <p>
+            Builds a visibility roadmap (VRM) inside a buffered feasible region and uses it to replace obstructed straight-line
+            transitions with collision-free detours.
+          </p>
+        </div>
+
+        <div class="infoCard">
+          <h3>Balanced multi-robot allocation</h3>
+          <p>
+            Uses a modified multiple Traveling Salesman Problem (mTSP) formulation to allocate swaths across robots and reduce
+            mission completion time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section class="section section--alt" id="method">
+    <div class="container">
+      <div class="section__head">
+        <h2>Method</h2>
+        <p class="muted">A clean pipeline view of the full MRCPP stack.</p>
+      </div>
+
+      <div class="pipeline">
+        <div class="step">
+          <div class="step__n">1</div>
+          <div class="step__body">
+            <h3>Optimal sweep orientation</h3>
+            <p>Compute the minimum-area enclosing rectangle (via rotating calipers) to align coverage with the ROI’s principal axis.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step__n">2</div>
+          <div class="step__body">
+            <h3>Minimum-turn swaths</h3>
+            <p>Generate parallel candidate lines and clip them against the ROI to obtain feasible swath segments.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step__n">3</div>
+          <div class="step__body">
+            <h3>Headland buffers</h3>
+            <p>Offset ROI inward and obstacles outward to guarantee turning clearance and prevent boundary violations.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step__n">4</div>
+          <div class="step__body">
+            <h3>VRM connectivity</h3>
+            <p>Create a visibility roadmap in the buffered region and compute shortest feasible transitions between disjoint swaths.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step__n">5</div>
+          <div class="step__body">
+            <h3>mTSP allocation + execution</h3>
+            <p>Allocate ordered swaths across robots and generate executable routes with alternating-edge traversal and VRM refinement.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="figureRow">
+        <figure class="figure">
+          <img src="assets/media/fig2.jpg" alt="MRCPP pipeline figure" />
+          <figcaption>Pipeline illustration (replace with your paper’s Fig. 2 export).</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="assets/media/fig3.jpg" alt="Benchmark environments and paths" />
+          <figcaption>Benchmark environments and MRCPP paths (replace with your Fig. 3 export).</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="section" id="results">
+    <div class="container">
+      <div class="section__head">
+        <h2>Results</h2>
+        <p class="muted">
+          MRCPP reduces turns and energy while remaining computationally efficient and scalable.
+        </p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Results tabs">
+        <button class="tab is-active" role="tab" aria-selected="true" aria-controls="panel-sim" id="tab-sim">Simulation</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-real" id="tab-real">Real-World</button>
+      </div>
+
+      <div class="tabPanels">
+        <div class="panel is-active" role="tabpanel" id="panel-sim" aria-labelledby="tab-sim">
+          <div class="grid2">
+            <div class="infoCard">
+              <h3>Benchmarks</h3>
+              <p>
+                Evaluate across multiple environments (e.g., Cape, Complex, Island, Rect, Simple) using consistent settings and metrics:
+                computation time, energy (trajectory-free and trajectory-based), and path length.
+              </p>
+              <ul class="bullets">
+                <li>Fast planning time (seconds-level in most cases)</li>
+                <li>Lower average energy per robot</li>
+                <li>Competitive path length, strong scalability with increased fleet size</li>
+              </ul>
+            </div>
+
+            <div class="infoCard">
+              <h3>Scalability</h3>
+              <p>
+                Scale the number of AAVs while maintaining low computation time and balanced energy usage per robot.
+              </p>
+              <div class="miniCallout">
+                <div class="miniCallout__k">Key idea</div>
+                <div class="miniCallout__v">Balanced swath allocation + efficient detours</div>
+              </div>
+              <p class="small muted">You can add a plot image here (optional).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" role="tabpanel" id="panel-real" aria-labelledby="tab-real">
+          <div class="grid2">
+            <div class="infoCard">
+              <h3>AAV experiment (DJI Mavic Air)</h3>
+              <p>
+                Upload planned paths to mission software and execute with two AAVs over a polygonal ROI with a no-fly zone.
+              </p>
+              <ul class="bullets">
+                <li>Two AAVs execute assigned swaths concurrently</li>
+                <li>Paths follow minimum-turn orientation</li>
+              </ul>
+            </div>
+
+            <div class="infoCard">
+              <h3>ASV experiment (coastal bay)</h3>
+              <p>
+                Two ASVs equipped with in-situ sensing execute coverage paths while operators monitor live video and path overlays.
+              </p>
+              <ul class="bullets">
+                <li>Real-time monitoring interface</li>
+                <li>Feasible transitions maintained within the operable region</li>
+              </ul>
+            </div>
+          </div>
+
+          <figure class="figure figure--wide">
+            <img src="assets/media/fig1.jpg" alt="AAV and ASV real-world experiments" />
+            <figcaption>Real-world experiments (replace with your Fig. 1 export).</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEOS -->
+  <section class="section section--alt" id="videos">
+    <div class="container">
+      <div class="section__head">
+        <h2>Videos</h2>
+        <p class="muted">Embed YouTube links, or host MP4s in your repo.</p>
+      </div>
+
+      <div class="grid2">
+        <div class="videoCard">
+          <div class="videoCard__head">
+            <h3>Project overview</h3>
+            <p class="muted small">Replace the iframe link with your YouTube video ID.</p>
+          </div>
+          <div class="videoEmbed">
+            <video controls preload="metadata" src="assets/videos/coverage_exp.mp4"></video>
+          </div>
+        </div>
+
+        <div class="videoCard">
+          <div class="videoCard__head">
+            <h3>Real-world experiment</h3>
+            <p class="muted small">Or replace with another YouTube embed.</p>
+          </div>
+          <div class="videoEmbed">
+            <video controls preload="metadata" src="assets/videos/asv_f_v.mp4"></video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CODE -->
+  <section class="section" id="code">
+    <div class="container">
+      <div class="section__head">
+        <h2>Code</h2>
+        <p class="muted">Link your repository + give clean instructions.</p>
+      </div>
+
+      <div class="codeBox">
+        <div class="codeBox__row">
+          <div>
+            <div class="kicker">GitHub</div>
+            <div class="big">
+              <a href="https://github.com/mrc-pp/mrcpp" target="_blank" rel="noopener">
+                github.com/mrc-pp/mrcpp
+              </a>
+            </div>
+            <div class="muted small">Update this link to your actual repo.</div>
+          </div>
+          <a class="btn btn--primary" href="https://github.com/mrc-pp/mrcpp" target="_blank" rel="noopener">Open Repo</a>
+        </div>
+
+        <hr class="sep" />
+
+        <div class="monoBlock">
+          <div class="monoTitle">Quick start (example)</div>
+          <pre><code>git clone https://github.com/mrc-pp/mrcpp.git
+cd mrcpp
+# build / run instructions here
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CITATION -->
+  <section class="section section--alt" id="citation">
+    <div class="container">
+      <div class="section__head">
+        <h2>Citation</h2>
+        <p class="muted">Add your final BibTeX here (update authors/year/venue as needed).</p>
+      </div>
+
+      <div class="bibtex">
+        <button class="btn btn--small" id="copyBib">Copy BibTeX</button>
+        <pre id="bibtexBlock"><code>@article{raxit_mrcpp,
+  title   = {Efficient Multi-Robot Coverage Path Planning of Non-Convex Regions of Interest},
+  author  = {},
+  journal = {IEEE Robotics and Automation Letters},
+  year    = {2025}
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section__head">
+        <h2>Contact</h2>
+        <p class="muted">Add your email and lab info.</p>
+      </div>
+
+      <div class="contactCard">
+        <div>
+          <div class="contactName">Sourav Raxit</div>
+          <div class="muted">Multi-Robot Coverage Path Planning (MRCPP)</div>
+        </div>
+        <div class="contactLinks">
+          <a class="pill" href="mailto:YOUR_EMAIL@university.edu">Email</a>
+          <a class="pill" href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a>
+          <a class="pill" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="muted small">
+        © <span id="year"></span> MRCPP • Built for GitHub Pages
+      </div>
+      <a class="toTop" href="#top">↑ Back to top</a>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html> 
