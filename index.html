@@ -550,44 +550,128 @@
       </div>
     </section>
 
-    <!-- Results / Benchmarks (NOW AFTER PIPELINE + TABLES) -->
-    <section id="results" class="section">
-      <div class="container is-max-desktop">
-        <h2 class="title is-3">Benchmark Results</h2>
+    <!-- ================= RESULTS / BENCHMARKS ================= -->
+  <section id="results" class="section">
+    <div class="container is-max-desktop">
+
+      <h2 class="title is-3">Benchmark Results</h2>
+
+      <!-- ================= Description ================= -->
+      <div class="content has-text-justified">
+        <p>
+          We evaluate MRCPP on multiple benchmark environments including
+          <em>Cape</em>, <em>Complex</em>, <em>Island</em>, <em>Simple</em>, and
+          <em>Rectangle</em>, each containing obstacles and/or no-fly zones.
+          Performance is reported in terms of computation time, path length,
+          and energy consumption using both trajectory-free and trajectory-based
+          estimators. In addition, scalability is assessed in a fixed complex
+          NFZ-constrained environment by increasing the fleet size.
+        </p>
+      </div>
+
+      <!-- ================= Benchmark Environments ================= -->
+      <div class="columns is-multiline">
+        <div class="column is-12">
+          <figure>
+            <img src="assets/envs_complex.png"
+                alt="Benchmark environments and MRCPP coverage paths." />
+            <figcaption class="figcap">
+              <strong>Fig. 2.</strong>
+              Representative benchmark environments with MRCPP-generated coverage
+              paths. No-fly zones are shown as shaded red polygons.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- ================= Scalability ================= -->
+      <div class="columns is-multiline">
+        <div class="column is-12">
+          <figure>
+            <img src="assets/scalability.png"
+                alt="Scalability in the Complex environment with varying numbers of robots." />
+            <figcaption class="figcap">
+              <strong>Fig. 3.</strong>
+              Scalability results in a fixed complex environment with no-fly zones
+              as the number of robots increases.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- ================= EAMCMP BASELINE COMPARISON ================= -->
+      <div class="infoCard" style="margin-top:32px;">
+
+        <h3 class="title is-4">EAMCMP Baseline Comparison</h3>
 
         <div class="content has-text-justified">
           <p>
-            We evaluate MRCPP on multiple benchmark environments (e.g., Cape, Complex, Island, Simple, Rectangle) with obstacles/no-fly zones,
-            reporting computation time, energy (trajectory-free and trajectory-based), and path length. We also test scalability in a fixed
-            NFZ-constrained complex environment as the number of robots increases.
+            We further compare MRCPP against the EAMCMP baseline across identical
+            benchmark environments. Compared to MRCPP, EAMCMP consistently produces
+            longer execution paths and higher energy consumption. This behavior
+            stems from the absence of an explicit minimum-turn swath orientation,
+            resulting in frequent reorientation maneuvers and increased ferrying
+            distance, particularly in elongated or structured regions. As a result,
+            MRCPP achieves superior energy efficiency and reduced mission
+            completion time.
           </p>
         </div>
 
-        <div class="figure-grid">
-          <div class="columns is-multiline">
-            <div class="column is-12">
-              <figure>
-                <img src="assets/envs_complex.png" alt="Benchmark environments and MRCPP coverage paths." />
-                <figcaption class="figcap">
-                  <strong>Fig. 2.</strong> Representative benchmark environments with MRCPP-generated coverage paths; no-fly zones appear as shaded red polygons where applicable.
-                </figcaption>
-              </figure>
-            </div>
+        <!-- ================= EAMCMP Images (Single Row) ================= -->
+        <div class="columns is-variable is-3 is-multiline is-mobile">
+
+          <div class="column is-one-fifth-desktop is-half-mobile">
+            <figure>
+              <img src="assets/eamcpp/cape_ea.png" alt="EAMCMP Cape" />
+              <figcaption class="has-text-centered">
+                <strong>Cape</strong> (EAMCMP)
+              </figcaption>
+            </figure>
           </div>
 
-          <div class="columns is-multiline">
-            <div class="column is-12">
-              <figure>
-                <img src="assets/scalability.png" alt="Scalability in the Complex environment with varying numbers of robots." />
-                <figcaption class="figcap">
-                  <strong>Fig. 3.</strong> Scalability demonstration in a fixed complex NFZ-constrained environment as fleet size increases.
-                </figcaption>
-              </figure>
-            </div>
+          <div class="column is-one-fifth-desktop is-half-mobile">
+            <figure>
+              <img src="assets/eamcpp/complex_ea_15.png" alt="EAMCMP Complex" />
+              <figcaption class="has-text-centered">
+                <strong>Complex</strong> (EAMCMP)
+              </figcaption>
+            </figure>
           </div>
+
+          <div class="column is-one-fifth-desktop is-half-mobile">
+            <figure>
+              <img src="assets/eamcpp/rect_ea.png" alt="EAMCMP Rectangle" />
+              <figcaption class="has-text-centered">
+                <strong>Rectangle</strong> (EAMCMP)
+              </figcaption>
+            </figure>
+          </div>
+
+          <div class="column is-one-fifth-desktop is-half-mobile">
+            <figure>
+              <img src="assets/eamcpp/nice_ea.png" alt="EAMCMP Island" />
+              <figcaption class="has-text-centered">
+                <strong>Island</strong> (EAMCMP)
+              </figcaption>
+            </figure>
+          </div>
+
+          <div class="column is-one-fifth-desktop is-half-mobile">
+            <figure>
+              <img src="assets/eamcpp/simple_ea.png" alt="EAMCMP Simple" />
+              <figcaption class="has-text-centered">
+                <strong>Simple</strong> (EAMCMP)
+              </figcaption>
+            </figure>
+          </div>
+
         </div>
       </div>
-    </section>
+
+    </div>
+  </section>
+<!-- ================= END RESULTS ================= -->
+
 
     <!-- Field Experiments -->
     <section id="field" class="section">
