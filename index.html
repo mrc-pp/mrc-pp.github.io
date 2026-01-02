@@ -6,11 +6,11 @@
 
     <meta
       name="description"
-      content="Project page for Efficient Multi-Robot Coverage Path Planning of Non-Convex Regions of Interests (MRCPP). Minimum-area sweep orientation, minimum-turn swath generation, headland buffers, VRM connectivity, and mTSP allocation."
+      content="Project page for Efficient Multi-Robot Coverage Path Planning of Non-Convex Regions of Interests (MRCPP). Minimum-area sweep orientation, minimum-turn swath generation, headland buffers, VG connectivity, and mTSP allocation."
     />
     <meta
       name="keywords"
-      content="MRCPP, multi-robot coverage path planning, non-convex ROI, minimum-turn swath generation, rotating calipers, minimum-area enclosing rectangle, headland buffer, visibility roadmap, VRM, mTSP, LKH, no-fly zones, obstacles, UAV, AAV, ASV"
+      content="MRCPP, multi-robot coverage path planning, non-convex ROI, minimum-turn swath generation, rotating calipers, minimum-area enclosing rectangle, headland buffer, visibility graph, VG, mTSP, LKH, no-fly zones, obstacles, UAV, AAV, ASV"
     />
 
     <title>Efficient Multi-Robot Coverage Path Planning of Non-Convex Regions of Interests (MRCPP)</title>
@@ -122,7 +122,9 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            This letter presents a framework for multi-robot coverage path planning in large, nonconvex Regions of Interest containing obstacles and no-fly zones. The proposed method begins by determining an optimal sweep orientation through the minimum-area enclosing rectangle computed using a rotating-calipers procedure. Using this orientation, a minimum-turn swath generation algorithm produces parallel coverage lines that are clipped against the obstacle-free space and sorted along the field’s minor axis to ensure spatial continuity and reduce turn transitions. Both the outer ROI boundary and all internal exclusion zones are expanded using analytically derived headland buffers, producing a reduced operable region that guarantees sufficient clearance for turning maneuvers and prevents boundary violations. A visibility-roadmap (VRM) structure provides geometric connectivity between disjoint swath segments, enabling feasible transitions that remain entirely inside the buffered region. A modified multiple Traveling Salesman Problem (mTSP) formulation assigns the ordered swaths to robots, balancing workloads and minimizing total mission time. Simulations and real-world experiments demonstrate that the proposed framework significantly reduces the number of turns, energy consumption, and computation time compared to state-of-the-art planners, while maintaining strong scalability across increasing fleet sizes. 
+            This letter presents an energy-efficient multi-robot coverage path planning (MRCPP) framework for large, nonconvex Regions of Interest (ROI) containing obstacles and no-fly zones. Existing minimum-energy coverage planning algorithms utilize meta-heuristic boustrophedon workspace decomposition. Therefore, even with minimum energy objectives and energy consumption constraints, they cannot achieve optimal energy efficiency. Moreover, most existing frameworks support only a single type of robotic platform. MRCPP overcomes these limitations by: generating near-optimal sweep orientations, creating parallel swaths with minimal turns, calculating headland buffers to ensure safe turning clearance, using an efficient mTSP solver to balance workloads and minimize mission time, and connecting disjoint segments via a modified visibility graph that tracks heading angles while maintaining transitions within safe regions.
+    The efficacy of the proposed MRCPP framework is demonstrated through real-world experiments involving autonomous aerial vehicles (AAVs) and autonomous surface vehicles (ASVs).
+    Evaluations demonstrate that the proposed MRCPP consistently outperforms state-of-the-art planners, reducing average per-robot energy consumption by up to 58\% and computation time by an order of magnitude, while maintaining balanced workload distribution and strong scalability across increasing fleet sizes. The MRCPP framework will be released as an open-source package and videos of real-world and simulated experiments are available at https:mrc-pp.github.io.
           </p>
         </div>
       </div>
@@ -148,14 +150,14 @@
                 <li><strong>Minimum-area sweep orientation:</strong> rotating calipers compute the minimum-area enclosing rectangle to set a globally consistent sweep direction.</li>
                 <li><strong>Minimum-turn swath generation:</strong> parallel swaths aligned with the sweep direction, clipped to the ROI, ordered along the minor axis.</li>
                 <li><strong>Headland buffers:</strong> buffering the ROI boundary and exclusion zones yields a safe operable region for turns.</li>
-                <li><strong>VRM connectivity:</strong> a visibility-roadmap graph connects disjoint swaths with collision-free transitions.</li>
+                <li><strong>VG connectivity:</strong> a visibility graph connects disjoint swaths with collision-free transitions.</li>
                 <li><strong>Workload-balanced allocation:</strong> a modified <strong>mTSP</strong> assigns swaths to minimize the maximum robot path length.</li>
               </ul>
 
               <div class="tags mt-3">
                 <span class="tag is-spec">Rotating Calipers</span>
                 <span class="tag is-spec">Headland Buffering</span>
-                <span class="tag is-spec">Visibility Roadmap</span>
+                <span class="tag is-spec">Visibility Graph</span>
                 <span class="tag is-spec">mTSP (LKH)</span>
               </div>
             </div>
@@ -172,7 +174,7 @@
         <div class="content has-text-justified">
           <p>
             MRCPP follows a geometry-to-optimization workflow: (i) compute a global sweep orientation, (ii) generate parallel swaths in the buffered free space,
-            (iii) connect disjoint swaths using VRM-based transitions, and (iv) allocate swaths to robots via a workload-balanced mTSP formulation.
+            (iii) connect disjoint swaths using VG-based transitions, and (iv) allocate swaths to robots via a workload-balanced mTSP formulation.
           </p>
         </div>
 
@@ -183,7 +185,7 @@
                 <img src="assets/mrcpp.png" alt="MRCPP pipeline: ROI and exclusion zones, headlands, swaths, and allocation." />
                 <figcaption class="figcap">
                   <strong>Fig. 1.</strong> MRCPP pipeline: ROI with exclusion zones, headland-buffered operable region, parallel swath decomposition,
-                  VRM connectivity for feasible transitions, and multi-robot allocation via mTSP.
+                  VG-based connectivity for feasible transitions, and multi-robot allocation via mTSP.
                 </figcaption>
               </figure>
             </div>
@@ -696,9 +698,9 @@
 
           <div class="column is-half">
             <figure>
-              <img src="assets/asv_f.png" alt="ASV coverage experiment with two surface vehicles." />
+              <img src="assets/asv_cover_final.PNG" alt="ASV coverage experiment with two surface vehicles." />
               <figcaption class="figcap">
-                <strong>Fig. 4b.</strong> ASV coverage experiment: two ASVs execute coverage paths shown in red and green over satellite imagery of an aquatic environment.
+                <strong>Fig. 4b.</strong> ASV coverage experiment: two ASVs execute coverage paths shown in red and green and obstacles (yellow) over satellite imagery of an aquatic environment.
               </figcaption>
             </figure>
           </div>
@@ -747,7 +749,7 @@
             <h3 class="title is-5">ASV Experiment</h3>
 
             <video class="video" controls playsinline preload="metadata">
-              <source src="./assets/videos/asv_f_v.mp4" type="video/mp4" />
+              <source src="./assets/videos/asv_cover_f.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
@@ -755,7 +757,7 @@
               <strong>Description (Fig. 1b):</strong>
               Two autonomous surface vehicles (ASVs), each equipped with YSI EXO2 sondes,
               execute MRCPP-planned coverage paths in a coastal aquatic environment.
-              The executed trajectories (red and green) are overlaid on satellite imagery,
+              The executed trajectories (red and green) and obstacle (yellow) are overlaid on satellite imagery,
               enabling real-time monitoring and verification of coverage performance.
             </p>
 
