@@ -82,7 +82,7 @@
 
           <!-- Links -->
           <div class="publication-links mt-4">
-            <a class="button is-dark is-rounded" href="assets/MRCPP.pdf" target="_blank" rel="noopener">
+            <a class="button is-dark is-rounded" href="assets/MRCPP_v1.pdf" target="_blank" rel="noopener">
               <span class="icon"><i class="fas fa-file-pdf"></i></span>
               <span>Paper (PDF)</span>
             </a>
@@ -189,7 +189,7 @@
           <div class="columns is-multiline">
             <div class="column is-12">
               <figure>
-                <img src="assets/mrcpp.png" alt="MRCPP pipeline: ROI and exclusion zones, headlands, swaths, and allocation." />
+                <img src="assets/mrcpp_final_f.png" alt="MRCPP pipeline: ROI and exclusion zones, headlands, swaths, and allocation." />
                 <figcaption class="figcap">
                   <strong>Fig. 1.</strong> MRCPP pipeline: ROI with exclusion zones, headland-buffered operable region, parallel swath decomposition,
                   VG-based connectivity for feasible transitions, and multi-robot allocation via mTSP.
@@ -208,13 +208,7 @@
 
         <div class="content has-text-justified">
           <p>
-            We evaluate MRCPP on multiple benchmark environments including
-            <em>Cape</em>, <em>Complex</em>, <em>Wetland</em>, <em>Island</em>, <em>Simple</em>, and
-            <em>Rectangle</em>, each containing obstacles and/or no-fly zones.
-            Performance is reported in terms of computation time, path length,
-            and energy consumption using both trajectory-free and trajectory-based
-            estimators. Scalability is assessed in fixed NFZ-constrained environments
-            by increasing the fleet size.
+            We evaluate MRCPP on seven benchmark environments: Cape, Complex-12, Complex-22, Wetland, Island, Rect, and Simple. These range from simple convex regions to large non-convex ROIs with internal no-fly zones (Complex-12, Complex-22, Wetland). Performance is reported in terms of computation time, path length, and energy consumption using both trajectory-based and coverage-only estimators. Scalability is further assessed by increasing fleet size in the Complex-22 and Cape environments.
           </p>
         </div>
 
@@ -222,7 +216,7 @@
         <div class="columns is-multiline">
           <div class="column is-12">
             <figure>
-              <img src="assets/envs_complex.png" alt="Benchmark environments and MRCPP coverage paths." />
+              <img src="assets/env_mrcpp.png" alt="Benchmark environments and MRCPP coverage paths." />
               <figcaption class="figcap">
                 <strong>Fig. 2.</strong>
                 Representative benchmark environments with MRCPP-generated coverage paths for three AAVs
@@ -428,11 +422,7 @@
           <h3 class="title is-4">EAMCMP Baseline Comparison</h3>
           <div class="content has-text-justified">
             <p>
-              Compared to MRCPP, EAMCMP consistently exhibits higher energy consumption
-              and longer execution paths across benchmark environments.
-              The absence of an explicit minimum-turn swath orientation results in
-              frequent reorientation maneuvers and increased ferrying distance,
-              particularly in elongated or structured regions.
+              EAMCMP relies on boustrophedon decomposition without explicit sweep orientation optimization, resulting in suboptimal turn sequences and higher energy consumption across most benchmark environments. MRCPP outperforms EAMCMP in both total fleet energy (E_t) and coverage-only energy (Ē_t) in six of seven scenarios — the exception being Island, where EAMCMP achieves a marginally lower E_t (36.80 Wh vs. 37.82 Wh) due to its sensitivity to initial vehicle positions. Furthermore, EAMCMP fails to produce a valid solution in the Complex-12 environment, whereas MRCPP successfully solves all seven scenarios.
             </p>
           </div>
           <div class="columns is-variable is-3 is-multiline is-mobile">
