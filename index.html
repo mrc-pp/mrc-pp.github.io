@@ -49,6 +49,15 @@
       .subtitle.kicker { color: var(--brand); letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
       .media + .media { margin-top: 1rem; }
       .video { aspect-ratio: 16/9; width: 100%; border-radius: 10px; }
+
+      /* Wide benchmark table tweaks */
+      .bench-table { font-size: 0.78rem; }
+      .bench-table th, .bench-table td { white-space: nowrap; padding: 0.35rem 0.5rem; }
+      .bench-table thead tr:first-child th { border-bottom: 2px solid #dbdbdb; }
+      .method-header-mrcpp   { background: #e6fcf5; color: #087f5b; text-align: center; }
+      .method-header-eamcmp  { background: #edf2ff; color: #364fc7; text-align: center; }
+      .method-header-darp    { background: #fff4e6; color: #e8590c; text-align: center; }
+      .method-header-popcorn { background: #f8f0fc; color: #862e9c; text-align: center; }
     </style>
   </head>
 
@@ -68,7 +77,7 @@
 
           <!-- Authors -->
           <div class="is-size-5 mt-4 publication-authors">
-            <span class="author-block"><strong>Authors:</strong> &lt;Add authors & affiliations&gt;</span>
+            <span class="author-block"><strong>Authors:</strong> &lt;Add authors &amp; affiliations&gt;</span>
           </div>
 
           <!-- Links -->
@@ -88,7 +97,7 @@
               <span>Cite</span>
             </a>
 
-            <a class="button is-dark is-rounded" href="https://github.com/your/repo" target="_blank" rel="noopener">
+            <a class="button is-dark is-rounded" href="https://anonymous.4open.science/r/mrcpp_public-6BFF" target="_blank" rel="noopener">
               <span class="icon"><i class="fab fa-github"></i></span>
               <span>Code</span>
             </a>
@@ -106,6 +115,7 @@
             <a class="level-item" href="#overview">Overview</a>
             <a class="level-item" href="#pipeline">Pipeline</a>
             <a class="level-item" href="#tables">Tables</a>
+            <a class="level-item" href="#ablation">Ablation</a>
             <a class="level-item" href="#results">Results</a>
             <a class="level-item" href="#field">Field</a>
             <a class="level-item" href="#videos">Videos</a>
@@ -122,9 +132,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            This letter presents an energy-efficient multi-robot coverage path planning (MRCPP) framework for large, nonconvex Regions of Interest (ROI) containing obstacles and no-fly zones. Existing minimum-energy coverage planning algorithms utilize meta-heuristic boustrophedon workspace decomposition. Therefore, even with minimum energy objectives and energy consumption constraints, they cannot achieve optimal energy efficiency. Moreover, most existing frameworks support only a single type of robotic platform. MRCPP overcomes these limitations by: generating near-optimal sweep orientations, creating parallel swaths with minimal turns, calculating headland buffers to ensure safe turning clearance, using an efficient mTSP solver to balance workloads and minimize mission time, and connecting disjoint segments via a modified visibility graph that tracks heading angles while maintaining transitions within safe regions.
-    The efficacy of the proposed MRCPP framework is demonstrated through real-world experiments involving autonomous aerial vehicles (AAVs) and autonomous surface vehicles (ASVs).
-    Evaluations demonstrate that the proposed MRCPP consistently outperforms state-of-the-art planners, reducing average per-robot energy consumption by up to 58\% and computation time by an order of magnitude, while maintaining balanced workload distribution and strong scalability across increasing fleet sizes. The MRCPP framework will be released as an open-source package and videos of real-world and simulated experiments are available at https:mrc-pp.github.io.
+            This letter presents an energy-efficient multi-robot coverage path planning (MRCPP) framework for large, nonconvex Regions of Interest (ROI) containing obstacles and no-fly zones (NFZ). Existing minimum-energy coverage planning algorithms utilize meta-heuristic boustrophedon workspace decomposition. Therefore, even with minimum energy objectives and energy consumption constraints, they cannot achieve optimal energy efficiency. Moreover, most existing frameworks support only a single type of robotic platform. MRCPP overcomes these limitations by: generating globally-informed swath generation, creating parallel sweeping paths with minimal turns, calculating safety buffers to ensure safe turning clearance, using an efficient mTSP solver to balance workloads and minimize mission time, and connecting disjoint segments via a modified visibility graph that tracks heading angles while maintaining transitions within safe regions. The efficacy of the proposed MRCPP framework is demonstrated through real-world experiments involving autonomous aerial vehicles (AAVs) and autonomous surface vehicles (ASVs). Evaluations demonstrate that the proposed MRCPP consistently outperforms state-of-the-art planners, reducing average total energy consumption by 3% to 40% for a team of 3 robots and computation time by an order of magnitude, while maintaining balanced workload distribution and strong scalability across increasing fleet sizes. The MRCPP framework is released as an open-source package and videos of real-world and simulated experiments are available at <a href="https://mrc-pp.github.io/" target="_blank">https://mrc-pp.github.io/</a>.
           </p>
         </div>
       </div>
@@ -133,7 +141,7 @@
     <!-- Overview/Contributions -->
     <section id="overview" class="section">
       <div class="container is-max-desktop">
-        <h2 class="title is-3">Overview & Contributions</h2>
+        <h2 class="title is-3">Overview &amp; Contributions</h2>
 
         <div class="content has-text-justified">
           <p>
@@ -166,7 +174,7 @@
       </div>
     </section>
 
-    <!-- MRCPP Pipeline (MOVED BEFORE BENCHMARKS) -->
+    <!-- MRCPP Pipeline -->
     <section id="pipeline" class="section">
       <div class="container is-max-desktop">
         <h2 class="title is-3">MRCPP Pipeline</h2>
@@ -194,483 +202,603 @@
       </div>
     </section>
 
-    <!-- TABLES (ADDED) -->
+    <!-- ================= TABLES ================= -->
     <section id="tables" class="section">
       <div class="container is-max-desktop">
         <h2 class="title is-3">Tables</h2>
 
-        <!-- Table I -->
+        <!-- ── Table I ── -->
         <div class="content">
           <h3 class="title is-5">Table I. Three-AAV Comparison Across Environments</h3>
+          <p class="is-size-7 mb-2">
+            Metrics: computation time, total fleet energy including depot round-trips
+            (<span class="is-code">E<sub>t</sub></span>&nbsp;[Wh]), resulting path length
+            (<span class="is-code">ℓ</span>&nbsp;[km]), coverage-only fleet energy
+            (<span class="is-code">Ē<sub>t</sub></span>&nbsp;[Wh]), and coverage-only path length
+            (<span class="is-code">ℓ̄</span>&nbsp;[km]).
+            Best value per scenario highlighted in <strong>bold</strong>.
+            A dash (—) indicates no valid solution.
+          </p>
 
           <div class="table-container">
-            <table class="table is-fullwidth is-striped is-hoverable">
+            <table class="table is-bordered is-striped is-hoverable bench-table" style="min-width:900px;">
               <thead>
                 <tr>
-                  <th>Scenario</th>
-                  <th>Planner</th>
-                  <th>Time [s]</th>
-                  <th><span class="is-code">E</span><sub>o</sub> [Wh]</th>
-                  <th><span class="is-code">E</span><sub>t</sub> [Wh]</th>
-                  <th><span class="is-code">E</span><sub>o,avg</sub> [Wh]</th>
-                  <th><span class="is-code">E</span><sub>t,avg</sub> [Wh]</th>
-                  <th>Path [km]</th>
+                  <th rowspan="2">Scenario</th>
+                  <th colspan="5" class="method-header-mrcpp">MRCPP (Ours)</th>
+                  <th colspan="5" class="method-header-eamcmp">EAMCMP</th>
+                  <th colspan="5" class="method-header-darp">DARP+MST</th>
+                  <th colspan="5" class="method-header-popcorn">POPCORN+SALT</th>
+                </tr>
+                <tr>
+                  <!-- MRCPP -->
+                  <th>Time&nbsp;[s]</th>
+                  <th><span class="is-code">E<sub>t</sub></span></th>
+                  <th><span class="is-code">ℓ</span></th>
+                  <th><span class="is-code">Ē<sub>t</sub></span></th>
+                  <th><span class="is-code">ℓ̄</span></th>
+                  <!-- EAMCMP -->
+                  <th>Time&nbsp;[s]</th>
+                  <th><span class="is-code">E<sub>t</sub></span></th>
+                  <th><span class="is-code">ℓ</span></th>
+                  <th><span class="is-code">Ē<sub>t</sub></span></th>
+                  <th><span class="is-code">ℓ̄</span></th>
+                  <!-- DARP+MST -->
+                  <th>Time&nbsp;[s]</th>
+                  <th><span class="is-code">E<sub>t</sub></span></th>
+                  <th><span class="is-code">ℓ</span></th>
+                  <th><span class="is-code">Ē<sub>t</sub></span></th>
+                  <th><span class="is-code">ℓ̄</span></th>
+                  <!-- POPCORN+SALT -->
+                  <th>Time&nbsp;[s]</th>
+                  <th><span class="is-code">E<sub>t</sub></span></th>
+                  <th><span class="is-code">ℓ</span></th>
+                  <th><span class="is-code">Ē<sub>t</sub></span></th>
+                  <th><span class="is-code">ℓ̄</span></th>
                 </tr>
               </thead>
-
               <tbody>
+
                 <!-- Cape -->
                 <tr>
-                  <td>Cape</td>
-                  <td><strong>MRCPP (Ours)</strong></td>
-                  <td><strong>0.503</strong></td>
-                  <td><strong>500.780</strong></td>
-                  <td><strong>502.985</strong></td>
-                  <td><strong>166.927</strong></td>
-                  <td><strong>167.662</strong></td>
-                  <td>31.187</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>EAMCMP</td>
-                  <td>4.905</td>
-                  <td>594.200</td>
-                  <td>567.693</td>
-                  <td>198.067</td>
-                  <td>189.231</td>
-                  <td>36.061</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>DARP+MST</td>
-                  <td>33.818</td>
-                  <td>627.110</td>
-                  <td>578.055</td>
-                  <td>209.037</td>
-                  <td>192.685</td>
-                  <td>35.397</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>POPCORN+SALT</td>
-                  <td>55.872</td>
-                  <td>689.690</td>
-                  <td>607.341</td>
-                  <td>229.897</td>
-                  <td>202.447</td>
-                  <td><strong>30.916</strong></td>
+                  <td><strong>Cape</strong></td>
+                  <!-- MRCPP -->
+                  <td><strong>1.28</strong></td>
+                  <td><strong>586.37</strong></td>
+                  <td>36.68</td>
+                  <td><strong>470.08</strong></td>
+                  <td>29.28</td>
+                  <!-- EAMCMP -->
+                  <td>4.93</td>
+                  <td>601.68</td>
+                  <td>35.66</td>
+                  <td>496.56</td>
+                  <td>28.90</td>
+                  <!-- DARP+MST -->
+                  <td>33.82</td>
+                  <td>600.85</td>
+                  <td><strong>34.92</strong></td>
+                  <td>503.98</td>
+                  <td><strong>28.68</strong></td>
+                  <!-- POPCORN+SALT -->
+                  <td>55.87</td>
+                  <td>818.99</td>
+                  <td>39.16</td>
+                  <td>708.18</td>
+                  <td>32.06</td>
                 </tr>
 
-                <!-- Complex 12 -->
+                <!-- Complex-12 -->
                 <tr>
-                  <td>Complex 12</td>
-                  <td><strong>MRCPP (Ours)</strong></td>
-                  <td>13.960</td>
-                  <td><strong>485.610</strong></td>
-                  <td>440.339</td>
-                  <td><strong>161.870</strong></td>
-                  <td>146.780</td>
-                  <td>28.185</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>EAMCMP</td>
-                  <td><strong>0.073</strong></td>
-                  <td>571.160</td>
-                  <td>539.665</td>
-                  <td>190.387</td>
-                  <td>179.888</td>
-                  <td>33.358</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>DARP+MST</td>
-                  <td>45.307</td>
-                  <td>487.400</td>
-                  <td><strong>434.163</strong></td>
-                  <td>162.467</td>
-                  <td><strong>144.721</strong></td>
-                  <td><strong>24.965</strong></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>POPCORN+SALT</td>
-                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                  <td><strong>Complex-12</strong></td>
+                  <!-- MRCPP -->
+                  <td><strong>3.60</strong></td>
+                  <td><strong>478.14</strong></td>
+                  <td>27.40</td>
+                  <td><strong>455.74</strong></td>
+                  <td>26.12</td>
+                  <!-- EAMCMP -->
+                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                  <!-- DARP+MST -->
+                  <td>45.31</td>
+                  <td>482.23</td>
+                  <td><strong>24.73</strong></td>
+                  <td>479.58</td>
+                  <td><strong>24.62</strong></td>
+                  <!-- POPCORN+SALT -->
+                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
                 </tr>
 
-                <!-- Complex 22 -->
+                <!-- Complex-22 -->
                 <tr>
-                  <td>Complex 22</td>
-                  <td><strong>MRCPP (Ours)</strong></td>
-                  <td><strong>0.884</strong></td>
-                  <td><strong>271.670</strong></td>
-                  <td><strong>244.131</strong></td>
-                  <td><strong>90.557</strong></td>
-                  <td><strong>81.377</strong></td>
-                  <td>15.731</td>
+                  <td><strong>Complex-22</strong></td>
+                  <!-- MRCPP -->
+                  <td><strong>1.23</strong></td>
+                  <td><strong>256.92</strong></td>
+                  <td><strong>14.49</strong></td>
+                  <td><strong>241.55</strong></td>
+                  <td><strong>13.66</strong></td>
+                  <!-- EAMCMP -->
+                  <td>1.25</td>
+                  <td>419.69</td>
+                  <td>23.55</td>
+                  <td>404.95</td>
+                  <td>22.67</td>
+                  <!-- DARP+MST -->
+                  <td>18.22</td>
+                  <td>270.75</td>
+                  <td>13.69</td>
+                  <td>265.88</td>
+                  <td>13.46</td>
+                  <!-- POPCORN+SALT -->
+                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
                 </tr>
+
+                <!-- Wetland (new) -->
                 <tr>
-                  <td></td>
-                  <td>EAMCMP</td>
-                  <td>1.246</td>
-                  <td>419.690</td>
-                  <td>401.813</td>
-                  <td>139.897</td>
-                  <td>133.938</td>
-                  <td>23.549</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>DARP+MST</td>
-                  <td>18.217</td>
-                  <td>272.440</td>
-                  <td>253.906</td>
-                  <td>90.813</td>
-                  <td>84.635</td>
-                  <td><strong>13.609</strong></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>POPCORN+SALT</td>
-                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                  <td><strong>Wetland</strong></td>
+                  <!-- MRCPP -->
+                  <td>2.10</td>
+                  <td><strong>293.52</strong></td>
+                  <td>17.06</td>
+                  <td><strong>274.17</strong></td>
+                  <td>15.82</td>
+                  <!-- EAMCMP -->
+                  <td><strong>0.52</strong></td>
+                  <td>309.67</td>
+                  <td>17.23</td>
+                  <td>285.93</td>
+                  <td>15.78</td>
+                  <!-- DARP+MST -->
+                  <td>44.39</td>
+                  <td>325.10</td>
+                  <td><strong>15.61</strong></td>
+                  <td>309.93</td>
+                  <td><strong>14.68</strong></td>
+                  <!-- POPCORN+SALT -->
+                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
                 </tr>
 
                 <!-- Island -->
                 <tr>
-                  <td>Island</td>
-                  <td><strong>MRCPP (Ours)</strong></td>
-                  <td><strong>0.177</strong></td>
-                  <td><strong>28.930</strong></td>
-                  <td><strong>28.048</strong></td>
-                  <td><strong>9.643</strong></td>
-                  <td><strong>9.349</strong></td>
-                  <td><strong>1.272</strong></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>EAMCMP</td>
-                  <td>0.275</td>
-                  <td>36.800</td>
-                  <td>35.662</td>
-                  <td>12.267</td>
-                  <td>11.887</td>
-                  <td>1.596</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>DARP+MST</td>
-                  <td>5.205</td>
-                  <td>32.960</td>
-                  <td>28.585</td>
-                  <td>10.987</td>
-                  <td>9.528</td>
-                  <td>1.325</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>POPCORN+SALT</td>
-                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+                  <td><strong>Island</strong></td>
+                  <!-- MRCPP -->
+                  <td><strong>0.47</strong></td>
+                  <td>37.82</td>
+                  <td>1.60</td>
+                  <td><strong>29.77</strong></td>
+                  <td>1.25</td>
+                  <!-- EAMCMP -->
+                  <td>0.53</td>
+                  <td><strong>36.80</strong></td>
+                  <td>1.60</td>
+                  <td>30.25</td>
+                  <td>1.29</td>
+                  <!-- DARP+MST -->
+                  <td>5.21</td>
+                  <td>37.61</td>
+                  <td><strong>1.37</strong></td>
+                  <td>33.85</td>
+                  <td><strong>1.18</strong></td>
+                  <!-- POPCORN+SALT -->
+                  <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
                 </tr>
 
                 <!-- Rect -->
                 <tr>
-                  <td>Rect</td>
-                  <td><strong>MRCPP (Ours)</strong></td>
-                  <td>0.205</td>
-                  <td><strong>67.550</strong></td>
-                  <td><strong>64.948</strong></td>
-                  <td><strong>22.517</strong></td>
-                  <td><strong>21.649</strong></td>
-                  <td><strong>3.708</strong></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>EAMCMP</td>
-                  <td><strong>0.017</strong></td>
-                  <td>85.160</td>
-                  <td>78.815</td>
-                  <td>28.387</td>
-                  <td>26.272</td>
-                  <td>4.347</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>DARP+MST</td>
-                  <td>4.746</td>
-                  <td>87.560</td>
-                  <td>103.515</td>
-                  <td>29.187</td>
-                  <td>34.505</td>
-                  <td>3.807</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>POPCORN+SALT</td>
-                  <td>20.714</td>
-                  <td>131.000</td>
-                  <td>119.013</td>
-                  <td>43.667</td>
-                  <td>39.671</td>
-                  <td>3.712</td>
+                  <td><strong>Rect</strong></td>
+                  <!-- MRCPP -->
+                  <td>0.44</td>
+                  <td><strong>68.21</strong></td>
+                  <td><strong>3.66</strong></td>
+                  <td><strong>55.16</strong></td>
+                  <td><strong>2.99</strong></td>
+                  <!-- EAMCMP -->
+                  <td><strong>0.02</strong></td>
+                  <td>85.25</td>
+                  <td>4.35</td>
+                  <td>73.83</td>
+                  <td>3.75</td>
+                  <!-- DARP+MST -->
+                  <td>4.75</td>
+                  <td>89.18</td>
+                  <td>3.81</td>
+                  <td>87.37</td>
+                  <td>3.74</td>
+                  <!-- POPCORN+SALT -->
+                  <td>20.71</td>
+                  <td>137.06</td>
+                  <td>3.99</td>
+                  <td>131.99</td>
+                  <td>3.75</td>
                 </tr>
 
                 <!-- Simple -->
                 <tr>
-                  <td>Simple</td>
-                  <td><strong>MRCPP (Ours)</strong></td>
-                  <td>0.248</td>
-                  <td><strong>108.790</strong></td>
-                  <td><strong>108.411</strong></td>
-                  <td><strong>36.263</strong></td>
-                  <td><strong>36.137</strong></td>
-                  <td><strong>6.186</strong></td>
+                  <td><strong>Simple</strong></td>
+                  <!-- MRCPP -->
+                  <td>0.63</td>
+                  <td><strong>117.90</strong></td>
+                  <td>6.67</td>
+                  <td><strong>104.46</strong></td>
+                  <td><strong>5.97</strong></td>
+                  <!-- EAMCMP -->
+                  <td><strong>0.02</strong></td>
+                  <td>185.09</td>
+                  <td>10.41</td>
+                  <td>169.56</td>
+                  <td>9.57</td>
+                  <!-- DARP+MST -->
+                  <td>5.70</td>
+                  <td>140.25</td>
+                  <td><strong>6.33</strong></td>
+                  <td>138.14</td>
+                  <td>6.26</td>
+                  <!-- POPCORN+SALT -->
+                  <td>32.28</td>
+                  <td>242.59</td>
+                  <td>7.18</td>
+                  <td>235.47</td>
+                  <td>6.83</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div><!-- /.table-container -->
+        </div><!-- /.content (Table I) -->
+
+        <hr />
+
+        <!-- ── Scalability Figure ── -->
+        <div class="content">
+          <h3 class="title is-5">Table II. Scalability in the Complex Environment (4–10 AAVs)</h3>
+          <p class="is-size-7 mb-4">
+            Scalability results as fleet size increases from 4 to 10 AAVs in fixed NFZ-constrained environments.
+            MRCPP solves all configurations in under 4&nbsp;s and consistently achieves lower energy consumption;
+            EAMCMP fails for fleets of 10 in Complex and all sizes above 4 in Cape.
+          </p>
+
+          <figure>
+            <img src="assets/scalability.png"
+                 alt="Scalability results for MRCPP vs baselines as number of robots increases."
+                 style="width:100%; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08);" />
+            <figcaption class="figcap">
+              <strong>Fig. (Scalability).</strong>
+              Scalability in fixed NFZ-constrained environments with varying fleet sizes (4–10 AAVs).
+              MRCPP scales gracefully across all configurations; EAMCMP fails for larger fleets in the Cape environment.
+            </figcaption>
+          </figure>
+        </div>
+
+      </div><!-- /.container -->
+    </section>
+    <!-- ================= END TABLES ================= -->
+
+
+    <!-- ================= ABLATION STUDY ================= -->
+    <section id="ablation" class="section">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3">Ablation Study</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            We evaluate four sweep orientation strategies and assess the sensitivity of the buffer
+            parameter, then compare MRCPP and EAMCMP head-to-head in an obstacle-rich environment
+            across different fleet sizes.
+          </p>
+        </div>
+
+        <!-- ── Table III: Orientation Ablation ── -->
+        <div class="content">
+          <h3 class="title is-5">Table III. Orientation Ablation — Fleet Energy Across Scenarios</h3>
+          <p class="is-size-7 mb-2">
+            Four sweep orientation strategies evaluated across seven benchmark scenarios.
+            Metrics: total fleet energy including depot round-trips
+            (<span class="is-code">E<sub>t</sub></span>&nbsp;[Wh]) and
+            coverage-only fleet energy
+            (<span class="is-code">Ē<sub>t</sub></span>&nbsp;[Wh]).
+            <strong>Bold</strong> marks the lowest <span class="is-code">E<sub>t</sub></span> per scenario.
+          </p>
+
+          <div class="table-container">
+            <table class="table is-bordered is-striped is-hoverable bench-table">
+              <thead>
+                <tr>
+                  <th rowspan="2">Scenario</th>
+                  <th colspan="2" class="method-header-mrcpp" style="text-align:center;">MAR</th>
+                  <th colspan="2" class="method-header-eamcmp" style="text-align:center;">Angle Search</th>
+                  <th colspan="2" class="method-header-darp" style="text-align:center;">PCA</th>
+                  <th colspan="2" class="method-header-popcorn" style="text-align:center;">Min-Width</th>
                 </tr>
                 <tr>
-                  <td></td>
-                  <td>EAMCMP</td>
-                  <td><strong>0.018</strong></td>
-                  <td>183.210</td>
-                  <td>173.527</td>
-                  <td>61.070</td>
-                  <td>57.842</td>
-                  <td>10.283</td>
+                  <th><span class="is-code">E<sub>t</sub></span></th><th><span class="is-code">Ē<sub>t</sub></span></th>
+                  <th><span class="is-code">E<sub>t</sub></span></th><th><span class="is-code">Ē<sub>t</sub></span></th>
+                  <th><span class="is-code">E<sub>t</sub></span></th><th><span class="is-code">Ē<sub>t</sub></span></th>
+                  <th><span class="is-code">E<sub>t</sub></span></th><th><span class="is-code">Ē<sub>t</sub></span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Cape</strong></td>
+                  <td>589.21</td><td>464.64</td>
+                  <td>662.84</td><td>537.14</td>
+                  <td><strong>586.37</strong></td><td>470.08</td>
+                  <td>652.80</td><td>540.78</td>
                 </tr>
                 <tr>
-                  <td></td>
-                  <td>DARP+MST</td>
-                  <td>5.700</td>
-                  <td>142.050</td>
-                  <td>133.504</td>
-                  <td>47.350</td>
-                  <td>44.501</td>
-                  <td>6.288</td>
+                  <td><strong>Complex-12</strong></td>
+                  <td>533.65</td><td>506.20</td>
+                  <td>486.15</td><td>457.19</td>
+                  <td>507.58</td><td>470.05</td>
+                  <td><strong>478.14</strong></td><td>455.74</td>
                 </tr>
                 <tr>
-                  <td></td>
-                  <td>POPCORN+SALT</td>
-                  <td>32.283</td>
-                  <td>230.700</td>
-                  <td>212.720</td>
-                  <td>76.900</td>
-                  <td>70.907</td>
-                  <td>6.579</td>
+                  <td><strong>Complex-22</strong></td>
+                  <td>275.91</td><td>253.37</td>
+                  <td>278.34</td><td>260.82</td>
+                  <td><strong>256.92</strong></td><td>241.55</td>
+                  <td>276.91</td><td>257.23</td>
+                </tr>
+                <tr>
+                  <td><strong>Island</strong></td>
+                  <td>39.00</td><td>32.43</td>
+                  <td>40.67</td><td>33.13</td>
+                  <td>39.60</td><td>31.57</td>
+                  <td><strong>37.82</strong></td><td>29.77</td>
+                </tr>
+                <tr>
+                  <td><strong>Rect</strong></td>
+                  <td>72.09</td><td>59.45</td>
+                  <td>72.76</td><td>61.70</td>
+                  <td>74.71</td><td>62.27</td>
+                  <td><strong>68.21</strong></td><td>55.16</td>
+                </tr>
+                <tr>
+                  <td><strong>Simple</strong></td>
+                  <td>161.45</td><td>143.66</td>
+                  <td>119.85</td><td>104.45</td>
+                  <td><strong>117.90</strong></td><td>104.46</td>
+                  <td>123.98</td><td>108.65</td>
+                </tr>
+                <tr>
+                  <td><strong>Wetland</strong></td>
+                  <td>161.45</td><td>143.66</td>
+                  <td>119.85</td><td>104.45</td>
+                  <td><strong>117.90</strong></td><td>104.46</td>
+                  <td>123.98</td><td>108.65</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
           <p class="help">
-            Best values per scenario are shown in <strong>bold</strong>. A dash (—) indicates no solution for that method in the scenario.
+            Min-Width achieves the lowest <span class="is-code">E<sub>t</sub></span> in three of seven scenarios
+            (Complex-12, Island, Rect), while PCA is best in three others (Cape, Complex-22, Simple).
+            MAR and Angle Search are never the top performers. The spread between best and worst orientation
+            can exceed 35% (Simple), confirming sweep direction is a significant design parameter.
           </p>
         </div>
 
         <hr />
 
-        <!-- Table II -->
+        <!-- ── Buffer Scale Figure ── -->
         <div class="content">
-          <h3 class="title is-5">Table II. Scalability in Complex 22 (4–10 AAVs)</h3>
+          <h3 class="title is-5">Effect of Buffer Scale on Energy Consumption</h3>
+
+          <figure>
+            <img src="assets/buffer_scale.png"
+                 alt="Effect of buffer scale w on total fleet energy consumption across environments."
+                 style="width:100%; max-width:620px; display:block; margin:0 auto;
+                        border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08);" />
+            <figcaption class="figcap" style="text-align:center;">
+              <strong>Fig. 4.</strong>
+              Effect of buffer scale <em>w</em> on total fleet energy consumption
+              <span class="is-code">E<sub>t</sub></span> across different environments.
+              Lower values indicate better energy efficiency. Non-convex environments
+              (e.g., Complex-12, Cape) show greater sensitivity to the buffer parameter
+              than simpler ones (Island, Rect, Simple, Wetland).
+            </figcaption>
+          </figure>
+        </div>
+
+        <hr />
+
+        <!-- ── Table IV: Obstacle-rich Fleet Comparison ── -->
+        <div class="content">
+          <h3 class="title is-5">Table IV. MRCPP vs EAMCMP — Obstacle-Rich Environment (3 / 6 / 10 AAVs)</h3>
+          <p class="is-size-7 mb-2">
+            Performance comparison in an environment with 10 convex and non-convex obstacles.
+            Metrics: worst-case per-robot energy
+            (<span class="is-code">E<sub>o<sub>max</sub></sub></span>&nbsp;[Wh]),
+            total fleet coverage-only energy
+            (<span class="is-code">Ē<sub>t</sub></span>&nbsp;[Wh]),
+            and computation time
+            (<span class="is-code">T<sub>c</sub></span>&nbsp;[s]).
+            <strong>Bold</strong> indicates the best value per fleet size.
+          </p>
 
           <div class="table-container">
-            <table class="table is-fullwidth is-striped is-hoverable">
+            <table class="table is-bordered is-striped is-hoverable bench-table">
               <thead>
                 <tr>
-                  <th rowspan="2">Scenario</th>
-                  <th colspan="4">MRCPP</th>
-                  <th colspan="4">EAMCMP</th>
-                  <th colspan="4">DARP+MST</th>
-                </tr>
-                <tr>
-                  <th><span class="is-code">t</span><sub>c</sub> [s]</th>
-                  <th><span class="is-code">E</span><sub>o,avg</sub> [Wh]</th>
-                  <th><span class="is-code">E</span><sub>t,avg</sub> [Wh]</th>
-                  <th>ℓ [km]</th>
-
-                  <th><span class="is-code">t</span><sub>c</sub> [s]</th>
-                  <th><span class="is-code">E</span><sub>o,avg</sub> [Wh]</th>
-                  <th><span class="is-code">E</span><sub>t,avg</sub> [Wh]</th>
-                  <th>ℓ [km]</th>
-
-                  <th><span class="is-code">t</span><sub>c</sub> [s]</th>
-                  <th><span class="is-code">E</span><sub>o,avg</sub> [Wh]</th>
-                  <th><span class="is-code">E</span><sub>t,avg</sub> [Wh]</th>
-                  <th>ℓ [km]</th>
+                  <th># Robots</th>
+                  <th>Method</th>
+                  <th><span class="is-code">E<sub>o<sub>max</sub></sub></span>&nbsp;[Wh]</th>
+                  <th><span class="is-code">Ē<sub>t</sub></span>&nbsp;[Wh]</th>
+                  <th><span class="is-code">T<sub>c</sub></span>&nbsp;[s]</th>
                 </tr>
               </thead>
-
               <tbody>
+                <!-- 3 robots -->
                 <tr>
-                  <td>complex (4 AAVs)</td>
-                  <td>3.36</td><td><strong>67.26</strong></td><td><strong>59.75</strong></td><td>15.60</td>
-                  <td><strong>0.98</strong></td><td>75.82</td><td>70.75</td><td>16.83</td>
-                  <td>14.40</td><td>69.64</td><td>62.08</td><td><strong>13.86</strong></td>
+                  <td rowspan="2"><strong>3</strong></td>
+                  <td class="method-header-mrcpp" style="background:#e6fcf5;"><strong>MRCPP (Ours)</strong></td>
+                  <td><strong>41.81</strong></td>
+                  <td><strong>111.17</strong></td>
+                  <td><strong>9.65</strong></td>
                 </tr>
                 <tr>
-                  <td>complex (5 AAVs)</td>
-                  <td><strong>0.84</strong></td><td><strong>54.01</strong></td><td><strong>47.52</strong></td><td>15.71</td>
-                  <td>1.25</td><td>62.14</td><td>57.43</td><td>17.29</td>
-                  <td>22.88</td><td>54.87</td><td>48.82</td><td><strong>13.49</strong></td>
+                  <td class="method-header-eamcmp" style="background:#edf2ff;">EAMCMP</td>
+                  <td>44.49</td>
+                  <td>132.25</td>
+                  <td>68.87</td>
+                </tr>
+                <!-- 6 robots -->
+                <tr>
+                  <td rowspan="2"><strong>6</strong></td>
+                  <td class="method-header-mrcpp" style="background:#e6fcf5;"><strong>MRCPP (Ours)</strong></td>
+                  <td><strong>21.81</strong></td>
+                  <td><strong>104.58</strong></td>
+                  <td><strong>3.22</strong></td>
                 </tr>
                 <tr>
-                  <td>complex (6 AAVs)</td>
-                  <td><strong>0.95</strong></td><td><strong>43.95</strong></td><td><strong>39.24</strong></td><td>15.33</td>
-                  <td>1.05</td><td>51.97</td><td>48.01</td><td>17.36</td>
-                  <td>37.04</td><td>49.68</td><td>43.92</td><td><strong>15.10</strong></td>
+                  <td class="method-header-eamcmp" style="background:#edf2ff;">EAMCMP</td>
+                  <td>23.11</td>
+                  <td>135.51</td>
+                  <td>58.06</td>
+                </tr>
+                <!-- 10 robots -->
+                <tr>
+                  <td rowspan="2"><strong>10</strong></td>
+                  <td class="method-header-mrcpp" style="background:#e6fcf5;"><strong>MRCPP (Ours)</strong></td>
+                  <td><strong>13.92</strong></td>
+                  <td><strong>96.73</strong></td>
+                  <td><strong>3.11</strong></td>
                 </tr>
                 <tr>
-                  <td>complex (7 AAVs)</td>
-                  <td><strong>1.03</strong></td><td><strong>35.93</strong></td><td><strong>32.48</strong></td><td><strong>14.51</strong></td>
-                  <td>1.50</td><td>43.04</td><td>41.18</td><td>17.12</td>
-                  <td>56.13</td><td>44.24</td><td>38.98</td><td>15.64</td>
-                </tr>
-                <tr>
-                  <td>complex (8 AAVs)</td>
-                  <td>1.22</td><td><strong>32.12</strong></td><td><strong>28.46</strong></td><td><strong>14.91</strong></td>
-                  <td><strong>1.14</strong></td><td>40.24</td><td>37.98</td><td>18.39</td>
-                  <td>66.04</td><td>40.17</td><td>35.41</td><td>15.96</td>
-                </tr>
-                <tr>
-                  <td>complex (9 AAVs)</td>
-                  <td>1.00</td><td><strong>27.10</strong></td><td><strong>24.30</strong></td><td><strong>14.11</strong></td>
-                  <td><strong>0.73</strong></td><td>39.82</td><td>38.17</td><td>20.56</td>
-                  <td>48.32</td><td>37.77</td><td>33.38</td><td>16.57</td>
-                </tr>
-                <tr>
-                  <td>complex (10 AAVs)</td>
-                  <td>1.46</td><td><strong>24.25</strong></td><td><strong>21.87</strong></td><td><strong>14.00</strong></td>
-                  <td><strong>0.07</strong></td><td>57.12</td><td>53.97</td><td>33.36</td>
-                  <td>—</td><td>—</td><td>—</td><td>—</td>
+                  <td class="method-header-eamcmp" style="background:#edf2ff;">EAMCMP</td>
+                  <td>14.73</td>
+                  <td>139.77</td>
+                  <td>68.95</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
           <p class="help">
-            Columns report computation time (<span class="is-code">t</span><sub>c</sub>), average energy per AAV
-            (<span class="is-code">E</span><sub>o,avg</sub>, <span class="is-code">E</span><sub>t,avg</sub>), and total coverage path length (ℓ).
+            MRCPP is roughly <strong>12× faster</strong> on average (5.33 s vs 65.29 s).
+            Its total fleet energy decreases by ~13% as the fleet grows from 3 to 10 AAVs,
+            reflecting effective workload distribution. EAMCMP's energy increases by ~5.7%
+            over the same range due to sensitivity to initial positions rather than geometric structure.
           </p>
         </div>
-      </div>
+
+        <!-- ── Fig. 5: Path comparison with 10 obstacles ── -->
+        <div class="content">
+          <div class="columns is-variable is-4">
+            <div class="column is-half">
+              <figure>
+                <img src="assets/eamcmp_obstacles.png"
+                     alt="EAMCMP coverage paths with 10 convex and non-convex obstacles."
+                     style="width:100%; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08);" />
+                <figcaption class="figcap has-text-centered">
+                  <strong>Fig. 5a.</strong> EAMCMP — 10 AAVs, 10 obstacles.
+                  Paths occasionally violate NFZ and obstacle constraints near hazards.
+                </figcaption>
+              </figure>
+            </div>
+            <div class="column is-half">
+              <figure>
+                <img src="assets/mrcpp_obstacles.png"
+                     alt="MRCPP coverage paths with 10 convex and non-convex obstacles."
+                     style="width:100%; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08);" />
+                <figcaption class="figcap has-text-centered">
+                  <strong>Fig. 5b.</strong> MRCPP — 10 AAVs, 10 obstacles.
+                  Buffer-zone constraints and VG detouring enforce strict separation from all boundaries.
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.container -->
     </section>
+    <!-- ================= END ABLATION STUDY ================= -->
+
 
     <!-- ================= RESULTS / BENCHMARKS ================= -->
-  <section id="results" class="section">
-    <div class="container is-max-desktop">
+    <section id="results" class="section">
+      <div class="container is-max-desktop">
 
-      <h2 class="title is-3">Benchmark Results</h2>
-
-      <!-- ================= Description ================= -->
-      <div class="content has-text-justified">
-        <p>
-          We evaluate MRCPP on multiple benchmark environments including
-          <em>Cape</em>, <em>Complex</em>, <em>Island</em>, <em>Simple</em>, and
-          <em>Rectangle</em>, each containing obstacles and/or no-fly zones.
-          Performance is reported in terms of computation time, path length,
-          and energy consumption using both trajectory-free and trajectory-based
-          estimators. In addition, scalability is assessed in a fixed complex
-          NFZ-constrained environment by increasing the fleet size.
-        </p>
-      </div>
-
-      <!-- ================= Benchmark Environments ================= -->
-      <div class="columns is-multiline">
-        <div class="column is-12">
-          <figure>
-            <img src="assets/envs_complex.png"
-                alt="Benchmark environments and MRCPP coverage paths." />
-            <figcaption class="figcap">
-              <strong>Fig. 2.</strong>
-              Representative benchmark environments with MRCPP-generated coverage
-              paths. No-fly zones are shown as shaded red polygons.
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-
-      <!-- ================= Scalability ================= -->
-      <div class="columns is-multiline">
-        <div class="column is-12">
-          <figure>
-            <img src="assets/scalability.png"
-                alt="Scalability in the Complex environment with varying numbers of robots." />
-            <figcaption class="figcap">
-              <strong>Fig. 3.</strong>
-              Scalability results in a fixed complex environment with no-fly zones
-              as the number of robots increases.
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-
-      <!-- ================= EAMCMP BASELINE COMPARISON ================= -->
-      <div class="infoCard" style="margin-top:32px;">
-
-        <h3 class="title is-4">EAMCMP Baseline Comparison</h3>
+        <h2 class="title is-3">Benchmark Results</h2>
 
         <div class="content has-text-justified">
           <p>
-            We further compare MRCPP against the EAMCMP baseline across identical
-            benchmark environments. Compared to MRCPP, EAMCMP consistently exhibits higher energy consumption
-            and longer execution paths across benchmark environments.
-            The absence of an explicit minimum-turn swath orientation results in
-            frequent reorientation maneuvers and increased ferrying distance,
-            particularly in elongated or structured regions.
+            We evaluate MRCPP on multiple benchmark environments including
+            <em>Cape</em>, <em>Complex</em>, <em>Wetland</em>, <em>Island</em>, <em>Simple</em>, and
+            <em>Rectangle</em>, each containing obstacles and/or no-fly zones.
+            Performance is reported in terms of computation time, path length,
+            and energy consumption using both trajectory-free and trajectory-based
+            estimators. In addition, scalability is assessed in fixed NFZ-constrained
+            environments by increasing the fleet size.
           </p>
         </div>
 
-        <!-- ================= EAMCMP Images (Single Row) ================= -->
-        <div class="columns is-variable is-3 is-multiline is-mobile">
-
-          <div class="column is-one-fifth-desktop is-half-mobile">
+        <div class="columns is-multiline">
+          <div class="column is-12">
             <figure>
-              <img src="assets/eamcpp/cape_ea.png" alt="EAMCMP Cape" />
-              <figcaption class="has-text-centered">
-                <strong>Cape</strong> (EAMCMP)
+              <img src="assets/envs_complex.png"
+                  alt="Benchmark environments and MRCPP coverage paths." />
+              <figcaption class="figcap">
+                <strong>Fig. 2.</strong>
+                Representative benchmark environments with MRCPP-generated coverage
+                paths. No-fly zones are shown as shaded red polygons.
               </figcaption>
             </figure>
           </div>
-
-          <div class="column is-one-fifth-desktop is-half-mobile">
-            <figure>
-              <img src="assets/eamcpp/complex_ea_15.png" alt="EAMCMP Complex" />
-              <figcaption class="has-text-centered">
-                <strong>Complex</strong> (EAMCMP)
-              </figcaption>
-            </figure>
-          </div>
-
-          <div class="column is-one-fifth-desktop is-half-mobile">
-            <figure>
-              <img src="assets/eamcpp/rect_ea.png" alt="EAMCMP Rectangle" />
-              <figcaption class="has-text-centered">
-                <strong>Rectangle</strong> (EAMCMP)
-              </figcaption>
-            </figure>
-          </div>
-
-          <div class="column is-one-fifth-desktop is-half-mobile">
-            <figure>
-              <img src="assets/eamcpp/nice_ea.png" alt="EAMCMP Island" />
-              <figcaption class="has-text-centered">
-                <strong>Island</strong> (EAMCMP)
-              </figcaption>
-            </figure>
-          </div>
-
-          <div class="column is-one-fifth-desktop is-half-mobile">
-            <figure>
-              <img src="assets/eamcpp/simple_ea.png" alt="EAMCMP Simple" />
-              <figcaption class="has-text-centered">
-                <strong>Simple</strong> (EAMCMP)
-              </figcaption>
-            </figure>
-          </div>
-
         </div>
-      </div>
 
-    </div>
-  </section>
-<!-- ================= END RESULTS ================= -->
+        <!-- EAMCMP Baseline Comparison -->
+        <div class="infoCard" style="margin-top:32px;">
+          <h3 class="title is-4">EAMCMP Baseline Comparison</h3>
+          <div class="content has-text-justified">
+            <p>
+              We further compare MRCPP against the EAMCMP baseline across identical
+              benchmark environments. Compared to MRCPP, EAMCMP consistently exhibits higher energy consumption
+              and longer execution paths across benchmark environments.
+              The absence of an explicit minimum-turn swath orientation results in
+              frequent reorientation maneuvers and increased ferrying distance,
+              particularly in elongated or structured regions.
+            </p>
+          </div>
+
+          <div class="columns is-variable is-3 is-multiline is-mobile">
+            <div class="column is-one-fifth-desktop is-half-mobile">
+              <figure>
+                <img src="assets/eamcpp/cape_ea.png" alt="EAMCMP Cape" />
+                <figcaption class="has-text-centered"><strong>Cape</strong> (EAMCMP)</figcaption>
+              </figure>
+            </div>
+            <div class="column is-one-fifth-desktop is-half-mobile">
+              <figure>
+                <img src="assets/eamcpp/complex_ea_15.png" alt="EAMCMP Complex" />
+                <figcaption class="has-text-centered"><strong>Complex</strong> (EAMCMP)</figcaption>
+              </figure>
+            </div>
+            <div class="column is-one-fifth-desktop is-half-mobile">
+              <figure>
+                <img src="assets/eamcpp/rect_ea.png" alt="EAMCMP Rectangle" />
+                <figcaption class="has-text-centered"><strong>Rectangle</strong> (EAMCMP)</figcaption>
+              </figure>
+            </div>
+            <div class="column is-one-fifth-desktop is-half-mobile">
+              <figure>
+                <img src="assets/eamcpp/nice_ea.png" alt="EAMCMP Island" />
+                <figcaption class="has-text-centered"><strong>Island</strong> (EAMCMP)</figcaption>
+              </figure>
+            </div>
+            <div class="column is-one-fifth-desktop is-half-mobile">
+              <figure>
+                <img src="assets/eamcpp/simple_ea.png" alt="EAMCMP Simple" />
+                <figcaption class="has-text-centered"><strong>Simple</strong> (EAMCMP)</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- ================= END RESULTS ================= -->
 
 
     <!-- Field Experiments -->
@@ -708,68 +836,62 @@
       </div>
     </section>
 
+
     <!-- Videos -->
-  <!-- Videos -->
-  <section id="videos" class="section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3">Videos</h2>
+    <section id="videos" class="section">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3">Videos</h2>
 
-      <p class="is-size-6 mb-4">
-        <strong>Note:</strong> For best viewing quality, please watch the videos in
-        <strong>full-screen mode</strong>.
-      </p>
+        <p class="is-size-6 mb-4">
+          <strong>Note:</strong> For best viewing quality, please watch the videos in
+          <strong>full-screen mode</strong>.
+        </p>
 
-      <div class="content">
-        <div class="columns is-variable is-5">
+        <div class="content">
+          <div class="columns is-variable is-5">
 
-          <!-- AAV Video -->
-          <div class="column is-6">
-            <h3 class="title is-5">AAV Experiment</h3>
+            <!-- AAV Video -->
+            <div class="column is-6">
+              <h3 class="title is-5">AAV Experiment</h3>
+              <video class="video" controls playsinline preload="metadata">
+                <source src="./assets/videos/coverage_exp.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <p class="is-size-7 mt-2">
+                <strong>Description (Fig. 1a):</strong>
+                Two DJI Mavic Air AAVs execute MRCPP-generated coverage paths over a polygonal
+                Region of Interest (ROI). The planned trajectories (orange and blue) are uploaded
+                to the Litchi mission-planning software and flown concurrently. The circular red
+                region denotes a no-fly zone enforced during path generation.
+              </p>
+              <p class="is-size-7 has-text-grey">
+                Tip: Click the <i class="fas fa-expand"></i> icon in the video player to view in full screen.
+              </p>
+            </div>
 
-            <video class="video" controls playsinline preload="metadata">
-              <source src="./assets/videos/coverage_exp.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+            <!-- ASV Video -->
+            <div class="column is-6">
+              <h3 class="title is-5">ASV Experiment</h3>
+              <video class="video" controls playsinline preload="metadata">
+                <source src="./assets/videos/asv_cover_f.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <p class="is-size-7 mt-2">
+                <strong>Description (Fig. 1b):</strong>
+                Two autonomous surface vehicles (ASVs), each equipped with YSI EXO2 sondes,
+                execute MRCPP-planned coverage paths in a coastal aquatic environment.
+                The executed trajectories (red and green) and obstacle (yellow) are overlaid on satellite imagery,
+                enabling real-time monitoring and verification of coverage performance.
+              </p>
+              <p class="is-size-7 has-text-grey">
+                Tip: Full-screen playback is recommended for improved spatial clarity.
+              </p>
+            </div>
 
-            <p class="is-size-7 mt-2">
-              <strong>Description (Fig. 1a):</strong>
-              Two DJI Mavic Air AAVs execute MRCPP-generated coverage paths over a polygonal
-              Region of Interest (ROI). The planned trajectories (orange and blue) are uploaded
-              to the Litchi mission-planning software and flown concurrently. The circular red
-              region denotes a no-fly zone enforced during path generation.
-            </p>
-
-            <p class="is-size-7 has-text-grey">
-              Tip: Click the <i class="fas fa-expand"></i> icon in the video player to view in full screen.
-            </p>
           </div>
-
-          <!-- ASV Video -->
-          <div class="column is-6">
-            <h3 class="title is-5">ASV Experiment</h3>
-
-            <video class="video" controls playsinline preload="metadata">
-              <source src="./assets/videos/asv_cover_f.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-
-            <p class="is-size-7 mt-2">
-              <strong>Description (Fig. 1b):</strong>
-              Two autonomous surface vehicles (ASVs), each equipped with YSI EXO2 sondes,
-              execute MRCPP-planned coverage paths in a coastal aquatic environment.
-              The executed trajectories (red and green) and obstacle (yellow) are overlaid on satellite imagery,
-              enabling real-time monitoring and verification of coverage performance.
-            </p>
-
-            <p class="is-size-7 has-text-grey">
-              Tip: Full-screen playback is recommended for improved spatial clarity.
-            </p>
-          </div>
-
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
     <!-- BibTeX -->
